@@ -1,5 +1,5 @@
 # user.language
-allow system_server ctl_default_prop:property_service set;
+set_prop(system_server, ctl_default_prop)
 allow system_server system_prop:property_service set;
 
 allow system_server gpu_device:chr_file { open read write };
