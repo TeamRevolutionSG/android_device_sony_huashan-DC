@@ -15,6 +15,11 @@
     "branch":      "cm-12.1"
   },
   {
+    "repository": "CyanogenMod/android_device_sony_common",
+    "target_path": "device/sony/common",
+    "branch":      "cm-12.1"
+  },
+  {
     "repository": "CyanogenMod/android_hardware_sony_DASH",
     "target_path": "hardware/sony/DASH",
     "branch":      "cm-12.1"
