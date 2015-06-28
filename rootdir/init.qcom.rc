@@ -445,7 +445,7 @@ service qmuxd /system/bin/qmuxd
     class late_start
     user radio
     group radio audio bluetooth gps qcom_diag net_bt_stack
-    disabled
+
 
 # SONY: TrimArea Daemon
 # Last 2 args: start block(blk size 128k), number of blocks(partitionsize(kb)/128(kb))
