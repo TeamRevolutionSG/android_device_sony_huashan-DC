@@ -294,10 +294,6 @@ on post-fs-data
 
     rm /data/local/tmp/adreno_config.txt
 
-    # communicate with mpdecision and thermald
-    mkdir /dev/socket/mpdecision 0770 system system
-    chmod 2770 /dev/socket/mpdecision
-
     # Enable Power modes and set the CPU Freq Sampling rates
     write /sys/module/rpm_resources/enable_low_power/L2_cache 1
     write /sys/module/rpm_resources/enable_low_power/pxo 1
@@ -446,7 +442,6 @@ service qmuxd /system/bin/qmuxd
     user radio
     group radio audio bluetooth gps qcom_diag net_bt_stack
 
-
 # SONY: TrimArea Daemon
 # Last 2 args: start block(blk size 128k), number of blocks(partitionsize(kb)/128(kb))
 service tad_static /sbin/tad_static /dev/block/mmcblk0 1,16
@@ -473,8 +468,8 @@ service gsiff_daemon /system/bin/gsiff_daemon
 
 service qseecomd /system/bin/qseecomd
     class core
-    user system
-    group system
+    user root
+    group root
 
 service hw_config /system/bin/sh /system/etc/hw_config.sh
     class main
