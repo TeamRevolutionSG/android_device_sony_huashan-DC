@@ -49,7 +49,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/init.recovery.qcom.rc:root/init.recovery.qcom.rc \
     $(LOCAL_PATH)/rootdir/system/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
     $(LOCAL_PATH)/rootdir/system/etc/init.qcom.fm.sh:system/etc/init.qcom.fm.sh \
-    $(LOCAL_PATH)/rootdir/system/etc/init.qcom.baseband.sh:system/etc/init.qcom.baseband.sh \
     $(LOCAL_PATH)/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 # Additional sbin stuff
@@ -70,7 +69,7 @@ PRODUCT_COPY_FILES += \
 # Audio
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/rootdir/system/etc/snd_soc_msm/snd_soc_msm_2x:system/etc/snd_soc_msm/snd_soc_msm_2x
+    $(LOCAL_PATH)/rootdir/system/etc/mixer_paths.xml:system/etc/mixer_paths.xml
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -184,6 +183,10 @@ PRODUCT_PACKAGES += \
     mac-update \
     wcnss_service
 
+# Healthd
+PRODUCT_PACKAGES += \
+    charger_res_images
+
 # DRM
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
@@ -242,15 +245,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.call_ring.multiple=0
-
-# Low-RAM optimizations
-ADDITIONAL_BUILD_PROPERTIES += \
-    ro.config.low_ram=true \
-    persist.sys.force_highendgfx=true \
-    dalvik.vm.jit.codecachesize=0 \
-    config.disable_atlas=true \
-    ro.config.max_starting_bg=8 \
-    ro.sys.fw.bg_apps_limit=16
 
 PRODUCT_PACKAGES += libtime_genoff
 
