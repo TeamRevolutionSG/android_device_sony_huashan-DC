@@ -5,9 +5,9 @@
     "branch":      "cm-12.1"
   },
   {
-    "repository": "Mrcl1450/android_kernel_sony_msm8x60",
+    "repository": "AdrianDC/android_kernel_sony_msm8x60",
     "target_path": "kernel/sony/msm8x60",
-    "branch":      "cm-12.1"
+    "branch":      "cm-12.1_clean"
   },
   {
     "repository": "CyanogenMod/android_hardware_qcom_fm",
