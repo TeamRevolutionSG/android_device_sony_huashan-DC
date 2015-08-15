@@ -5,6 +5,11 @@
     "branch":      "cm-12.1"
   },
   {
+    "repository": "Mrcl1450/android_hardware_sony_thermanager",
+    "target_path": "hardware/sony/thermanager",
+    "branch":      "cm-12.1"
+  },
+  {
     "repository": "AdrianDC/android_kernel_sony_msm8x60",
     "target_path": "kernel/sony/msm8x60",
     "branch":      "cm-12.1_clean"
