@@ -12,12 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Perfd
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.extension_library=libqti-perfd-client.so
+
 # inherit from msm8960-common
 $(call inherit-product, device/sony/msm8960-common/msm8960.mk)
 
 DEVICE_PACKAGE_OVERLAYS += device/sony/huashan/overlay
 
-# This device is xhdpi.
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
@@ -49,7 +52,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/init.recovery.qcom.rc:root/init.recovery.qcom.rc \
     $(LOCAL_PATH)/rootdir/system/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
     $(LOCAL_PATH)/rootdir/system/etc/init.qcom.fm.sh:system/etc/init.qcom.fm.sh \
-    $(LOCAL_PATH)/rootdir/system/etc/init.qcom.baseband.sh:system/etc/init.qcom.baseband.sh \
     $(LOCAL_PATH)/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 # Additional sbin stuff
@@ -106,9 +108,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/hw_config.sh:system/etc/hw_config.sh
 
-# Thermal monitor configuration
+# Sony system_monitor
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/etc/thermanager.xml:system/etc/thermanager.xml
+    $(LOCAL_PATH)/rootdir/system/etc/sysmon.cfg:system/etc/sysmon.cfg
 
 # NFC Support
 PRODUCT_PACKAGES += \
@@ -151,9 +153,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     FM2 \
     FMRecord \
-    libqcomfm_jni
-
-PRODUCT_PACKAGES += \
+    libqcomfm_jni \
     qcom.fmradio
 
 # Bluetooth
@@ -167,6 +167,10 @@ PRODUCT_PACKAGES += \
     libmmcamera_interface \
     libmmcamera_interface2
 
+# Healthd
+PRODUCT_PACKAGES += \
+    charger_res_images
+
 # Force use old camera api
 PRODUCT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1
@@ -179,30 +183,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     sensors.msm8960
 
-# Thermal management
-PRODUCT_PACKAGES += \
-    thermanager
-
 # Wifi service
 PRODUCT_PACKAGES += \
     mac-update \
     wcnss_service
 
-# Healthd
-PRODUCT_PACKAGES += \
-    charger_res_images
-
-# DRM
-PRODUCT_PROPERTY_OVERRIDES += \
-    drm.service.enabled=true
-
 # Misc
 PRODUCT_PACKAGES += \
     librs_jni \
     com.android.future.usb.accessory
-
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=libqti-perfd-client.so
 
 # Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -220,7 +209,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
+    ro.sf.lcd_density=320 \
     debug.composition.type=c2d
+
+# DRM
+PRODUCT_PROPERTY_OVERRIDES += \
+    drm.service.enabled=true
 
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -228,8 +222,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.audio.handset.mic=digital \
     persist.audio.lowlatency.rec=false \
     af.resampler.quality=255 \
-    ro.qc.sdk.audio.fluencetype=fluence \
-    qcom.hw.aac.encoder=true
+    ro.qc.sdk.audio.fluencetype=fluence
 
 # QCOM Location
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -251,14 +244,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.call_ring.multiple=0
 
-PRODUCT_PACKAGES += libtime_genoff
-
 # OpenGL ES 3.0
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196608
 
 # call dalvik heap config
-$(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+$(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
 # Include non-opensource parts
 $(call inherit-product, vendor/sony/huashan/huashan-vendor.mk)
+

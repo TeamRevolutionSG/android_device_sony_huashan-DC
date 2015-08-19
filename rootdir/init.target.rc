@@ -1,28 +1,30 @@
+on charger
+    write /sys/devices/i2c-10/10-0047/leds/LED1_R/led_current 30
+    write /sys/devices/i2c-10/10-0047/leds/LED1_G/led_current 30
+    write /sys/devices/i2c-10/10-0047/leds/LED1_B/led_current 30
+
 on boot
     # LM3560/cameralight
-    chown system system /sys/devices/i2c-10/10-0053/torch_enable
-    chmod 666 /sys/devices/i2c-10/10-0053/torch_enable
-    chown system system /sys/devices/i2c-10/10-0053/torch_current
-    chmod 666 /sys/devices/i2c-10/10-0053/torch_current
-    chown system camera /sys/devices/i2c-10/10-0053/privacy_enable
-    chown system camera /sys/devices/i2c-10/10-0053/privacy_current
+    chown system camera /sys/devices/i2c-10/10-0053/torch_enable
+    chmod 660 /sys/devices/i2c-10/10-0053/torch_enable
+    chown system camera /sys/devices/i2c-10/10-0053/torch_current
+    chmod 660 /sys/devices/i2c-10/10-0053/torch_current
     chown system camera /sys/devices/i2c-10/10-0053/flash_enable
     chown system camera /sys/devices/i2c-10/10-0053/flash_duration
     chown system camera /sys/devices/i2c-10/10-0053/flash_synchronization
+    chmod 664 /sys/devices/i2c-10/10-0053/flash_synchronization
     chown system camera /sys/devices/i2c-10/10-0053/flash_current
+    chmod 664 /sys/devices/i2c-10/10-0053/flash_current
     chown system camera /sys/devices/i2c-10/10-0053/status
-	
+
     # Owner for the proximity sensor
     chown system system /sys/devices/i2c-12/12-0054/threshold
     chown system system /sys/devices/i2c-12/12-0054/nburst
 
     # Vibrator
     chown root system /sys/class/timed_output/vibrator/level
-    chown root system /sys/devices/platform/mdp.525057/kcal
     chmod 0664 /sys/class/timed_output/vibrator/level
-    chmod 0664 /sys/devices/platform/mdp.525057/kcal
     restorecon /sys/class/timed_output/vibrator/level
-    restorecon /sys/devices/platform/mdp.525057/kcal
 
     # Permissions for LSM330D sensor
     chown system system /sys/devices/i2c-12/12-0019/pollrate_ms
@@ -40,3 +42,4 @@ on boot
     write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold 280
     chown system system /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
     chmod 0664 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
+

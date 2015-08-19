@@ -20,8 +20,8 @@ import init.sony.usb.rc
 on early-init
     mount debugfs debugfs /sys/kernel/debug
     symlink /data/tombstones /tombstones
-    write /sys/block/mmcblk0/queue/read_ahead_kb 128
-    write /sys/block/mmcblk1/queue/read_ahead_kb 128
+    write /sys/block/mmcblk0/queue/read_ahead_kb 256
+    write /sys/block/mmcblk1/queue/read_ahead_kb 256
 
 on init
     mkdir /mnt/shell/emulated 0700 shell shell
@@ -93,11 +93,6 @@ on early-boot
     write /sys/module/pm8921_charger/parameters/enable_lowbatt_detect 1
 
 on boot
-    # Bring CPUs online early
-    write /sys/devices/system/cpu/cpu1/online 1
-
-    start qcamerasvr
-
     exec /system/bin/btnvtool -O
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
@@ -261,6 +256,9 @@ on post-fs-data
     chmod 664 /data/system/sensors/settings
     chown system /data/system/sensors/settings
 
+    # Create the symlink to qcn wpa_supplicant folder for ar6000 wpa_supplicant
+    mkdir /data/system 0775 system system
+
     chown system system /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/policy
 
     # Create directories for gpsone_daemon services
@@ -276,25 +274,28 @@ on post-fs-data
 
     mkdir /data/audio 0770 media audio
 
-    # Enable Power save functionality for modem
-    setprop persist.radio.add_power_save 1
-
     # Camera
     mkdir /data/camera 0771 root camera
 
     # Create /data/time folder for time-services
     mkdir /data/time 0700 system system
 
+    # Display calibration
+    chown system system /sys/devices/virtual/graphics/fb0/rgb
+    chmod 0660 /sys/devices/virtual/graphics/fb0/rgb
+
     setprop vold.post_fs_data_done 1
 
     rm /data/local/tmp/adreno_config.txt
+
+    write /sys/block/mmcblk0/queue/scheduler fiops
 
     # Enable Power modes and set the CPU Freq Sampling rates
     write /sys/module/rpm_resources/enable_low_power/L2_cache 1
     write /sys/module/rpm_resources/enable_low_power/pxo 1
     write /sys/module/rpm_resources/enable_low_power/vdd_dig 1
     write /sys/module/rpm_resources/enable_low_power/vdd_mem 1
-    write /sys/module/pm_8x60/modes/cpu0/retention/idle_enabled 1
+    write /sys/module/pm_8x60/modes/cpu0/retention/idle_enabled 0
     write /sys/module/pm_8x60/modes/cpu1/retention/idle_enabled 1
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/suspend_enabled 1
     write /sys/module/pm_8x60/modes/cpu1/power_collapse/suspend_enabled 1
@@ -303,112 +304,40 @@ on post-fs-data
     write /sys/module/pm_8x60/modes/cpu0/standalone_power_collapse/idle_enabled 1
     write /sys/module/pm_8x60/modes/cpu1/standalone_power_collapse/idle_enabled 1
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled 1
-    write /sys/module/msm_thermal/core_control/enabled 0
-    write /sys/devices/system/cpu/cpu1/online 1
-
-    # ondemand
-    #write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "ondemand"
-    #write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "ondemand"
-    #write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 50000
-    #write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 90
-    #write /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy 1
-    #write /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor 4
-    #write /sys/devices/system/cpu/cpufreq/ondemand/down_differential 10
-    #write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core 70
-    #write /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core 3
-    #write /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq 918000
-    #write /sys/devices/system/cpu/cpufreq/ondemand/sync_freq 1026000
-    #write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load 80
-    #chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
-    #chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
-    #chown system /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
-
-    # interactive
+    write /sys/module/cpu_boost/parameters/boost_ms 20
+    write /sys/module/cpu_boost/parameters/sync_threshold 1566000
+    write /sys/module/cpu_boost/parameters/input_boost_freq 1134000
+    write /sys/module/cpu_boost/parameters/input_boost_ms 40
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1026000
+    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 40000
+    write /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis 100000
+    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 810000
+    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay 30000
     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 30000
-    chown system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chown system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chown system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chown system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
-
+    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
+    write /sys/devices/system/cpu/cpufreq/interactive/io_is_busy 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 384000
-    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-    chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-    chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
-    write /sys/module/msm_thermal/core_control/enabled 1
-    chown root system /sys/devices/system/cpu/mfreq
-    chmod 220 /sys/devices/system/cpu/mfreq
-    chown root system /sys/devices/system/cpu/cpu1/online
-    chmod 664 /sys/devices/system/cpu/cpu1/online
-
-    # set DCVS parameters for CPU
-    write /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us 40000
-    write /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us 40000
-    write /sys/module/msm_dcvs/cores/cpu0/em_win_size_min_us 100000
-    write /sys/module/msm_dcvs/cores/cpu0/em_win_size_max_us 500000
-    write /sys/module/msm_dcvs/cores/cpu0/slack_mode_dynamic 0
-    write /sys/module/msm_dcvs/cores/cpu0/disable_pc_threshold 1000000
-    write /sys/module/msm_dcvs/cores/cpu1/slack_time_max_us 25000
-    write /sys/module/msm_dcvs/cores/cpu1/slack_time_min_us 25000
-    write /sys/module/msm_dcvs/cores/cpu1/em_win_size_min_us 100000
-    write /sys/module/msm_dcvs/cores/cpu1/em_win_size_max_us 500000
-    write /sys/module/msm_dcvs/cores/cpu1/slack_mode_dynamic 0
-    write /sys/module/msm_dcvs/cores/cpu1/disable_pc_threshold 1000000
-    # set DCVS parameters for GPU
-    write /sys/module/msm_dcvs/cores/gpu0/slack_time_max_us 20000
-    write /sys/module/msm_dcvs/cores/gpu0/slack_time_min_us 20000
-    write /sys/module/msm_dcvs/cores/gpu0/slack_mode_dynamic 0
-    # set msm_mpdecision parameters
-    write /sys/module/msm_mpdecision/slack_time_max_us 45000
-    write /sys/module/msm_mpdecision/slack_time_min_us 15000
-    write /sys/module/msm_mpdecision/em_win_size_min_us 100000
-    write /sys/module/msm_mpdecision/em_win_size_max_us 1000000
-    write /sys/module/msm_mpdecision/online_util_pct_min 3
-    write /sys/module/msm_mpdecision/online_util_pct_max 25
-    write /sys/module/msm_mpdecision/em_max_util_pct 97
-    write /sys/module/msm_mpdecision/rq_avg_poll_ms 2
-    write /sys/module/msm_mpdecision/mp_em_rounding_point_min 10
-    write /sys/module/msm_mpdecision/mp_em_rounding_point_max 85
-    write /sys/module/msm_mpdecision/iowait_threshold_pct 50
-    # set permissions for the nodes needed by display on/off hook
-    chown system /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
-    chown system /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
-    chown system /sys/module/msm_mpdecision/slack_time_max_us
-    chown system /sys/module/msm_mpdecision/slack_time_min_us
-    chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
-    chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
-    chmod 664 /sys/module/msm_mpdecision/slack_time_max_us
-    chmod 664 /sys/module/msm_mpdecision/slack_time_min_us
-
-    write /sys/devices/platform/msm_sdcc.3/idle_timeout 10
-    write /sys/block/mmcblk0/queue/scheduler fiops
-    start mpdecision
+    write /sys/devices/system/cpu/cpu1/online 1
 
 on charger
-    write /sys/module/msm_fb/parameters/align_buffer 0
-
     # Enable Power modes and set the CPU Freq Sampling rates
     write /sys/module/rpm_resources/enable_low_power/L2_cache 1
     write /sys/module/rpm_resources/enable_low_power/pxo 1
     write /sys/module/rpm_resources/enable_low_power/vdd_dig 1
     write /sys/module/rpm_resources/enable_low_power/vdd_mem 1
-    write /sys/module/pm_8x60/modes/cpu0/retention/idle_enabled 1
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/suspend_enabled 1
     write /sys/module/pm_8x60/modes/cpu1/power_collapse/suspend_enabled 1
-    write /sys/module/pm_8x60/modes/cpu0/standalone_power_collapse/suspend_enabled 1
-    write /sys/module/pm_8x60/modes/cpu1/standalone_power_collapse/suspend_enabled 1
-    write /sys/module/pm_8x60/modes/cpu0/standalone_power_collapse/idle_enabled 1
-    write /sys/module/pm_8x60/modes/cpu1/standalone_power_collapse/idle_enabled 1
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "powersave"
+    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 90
+    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 50000
+    write /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy 1
+    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor 4
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 384000
-    write /sys/devices/system/cpu/cpu1/online 0
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
@@ -550,16 +479,6 @@ service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -w 1023 /mnt/media_rw/us
     class late_start
     disabled
 
-service qcamerasvr /system/bin/mm-qcamera-daemon
-    class late_start
-    user camera
-    group camera system inet input graphics net_bt_stack
-
-service thermanager /system/bin/thermanager /system/etc/thermanager.xml
-    class main
-    user root
-    group root
-
 service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
     class main
     user root
@@ -572,6 +491,17 @@ service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     group system
     disabled
     oneshot
+
+# Start system_monitor
+service system_monitor /system/bin/system_monitor
+    socket sysmon stream 0660 root system
+    class core
+    user root
+
+# Healthd
+service charger /sbin/healthd -c
+    class charger
+    seclabel u:r:healthd:s0
 
 service rmt_storage /system/bin/rmt_storage
     class core
@@ -588,10 +518,6 @@ service ta_qmi_service /system/bin/ta_qmi_service
     class late_start
     user root
     disabled
-
-service bbset /system/bin/sh /system/etc/init.qcom.baseband.sh
-    class late_start
-    oneshot
 
 service wcnss-service /system/bin/wcnss_service
     class late_start
@@ -616,23 +542,21 @@ service setup_fs /system/bin/setup_fs /dev/block/platform/msm_sdcc.1/by-name/Use
     group root
     oneshot
 
-# healthd
-service charger /sbin/healthd -c
-    class charger
-    seclabel u:r:healthd:s0
-
+# Powersave
 on property:sys.perf.profile=0
     start mpdecision
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "powersave"
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "powersave"
-    write /sys/class/kgsl/kgsl-3d0/pwrscale/trustzone/governor "powersave"
+    write /sys/class/kgsl/kgsl-3d0/pwrscale/trustzone/governor "ondemand"
 
+# Balanced
 on property:sys.perf.profile=1
     start mpdecision
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
-    write /sys/class/kgsl/kgsl-3d0/pwrscale/trustzone/governor "interactive"
+    write /sys/class/kgsl/kgsl-3d0/pwrscale/trustzone/governor "ondemand"
 
+# Performance
 on property:sys.perf.profile=2
     stop mpdecision
     write /sys/devices/system/cpu/cpu0/online 1

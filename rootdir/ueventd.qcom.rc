@@ -192,14 +192,13 @@
 /sys/devices/i2c-10/10-0047/leds/*     trigger               0660 system system
 
 # BT
-/dev/hidraw0              0666   system     system
-/dev/hidraw1              0666   system     system
+/dev/hidraw0                                     0666  system  system
+/dev/hidraw1                                     0666  system  system
 
 # NFC
 /dev/pn544                0600   nfc         nfc
 
 # Wlan
-/dev/rfkill               0660   root       wifi
 /dev/wcnss_wlan           0660   system     system
 /dev/wcnss_ctrl           0660   system     system
 

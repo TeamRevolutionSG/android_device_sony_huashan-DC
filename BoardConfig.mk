@@ -28,7 +28,7 @@ BOARD_VENDOR_PLATFORM := viskan
 # Kernel information
 BOARD_KERNEL_BASE  := 0x80200000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_CMDLINE  := console=ttyHSL0,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3
+BOARD_KERNEL_CMDLINE  := androidboot.hardware=qcom user_debug=31 androidboot.baseband=msm msm_rtb.filter=0x3F ehci-hcd.park=3 vmalloc=400M
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000
 
 # Time
@@ -78,12 +78,17 @@ SOMC_CFG_SENSORS_PROXIMITY_APDS9702 := yes
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/sony/huashan/bluetooth
 
+# RIL
+BOARD_PROVIDES_LIBRIL := true
+
 # Healthd
 BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_SHOW_PERCENTAGE := true
-
-# RIL
-BOARD_PROVIDES_LIBRIL := true
+BACKLIGHT_PATH := /sys/devices/i2c-10/10-0040/leds/lcd-backlight1/brightness
+SECONDARY_BACKLIGHT_PATH := /sys/devices/i2c-10/10-0040/leds/lcd-backlight2/brightness
+RED_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_R/brightness
+GREEN_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_G/brightness
+BLUE_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_B/brightness
 
 # Needed for blobs
 TARGET_RELEASE_CPPFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
@@ -106,6 +111,11 @@ TARGET_USERIMAGES_USE_F2FS := true
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := C5302,C5303,C5306,huashan
+
+TARGET_DISPLAY_USE_RETIRE_FENCE := true
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
+OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
+HAVE_ADRENO_SOURCE := false
 
 # Audio
 BOARD_USES_LEGACY_ALSA_AUDIO := true
@@ -137,6 +147,7 @@ BOARD_SEPOLICY_DIRS += \
 BOARD_SEPOLICY_UNION += \
     file_contexts \
     file.te \
+    healthd.te \
     hostapd.te \
     init.te \
     init_shell.te \
@@ -156,10 +167,10 @@ BOARD_SEPOLICY_UNION += \
     shell.te \
     surfaceflinger.te \
     system_app.te \
+    system_monitor.te \
     system_server.te \
     tad_static.te \
     ta_qmi_service.te \
-    thermanager.te \
     updatemiscta.te \
     vold.te
 
