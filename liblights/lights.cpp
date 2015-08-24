@@ -38,6 +38,7 @@
 
 /* ===================================================================== */
 /* === Module Constants === */
+#define LIGHT_BRIGHTNESS_MAXIMUM 0xFF
 #define MAX_PATH_SIZE 80
 enum leds_state { LEDS_OFF, LEDS_NOTIFICATIONS, LEDS_BATTERY };
 enum leds_pupdate { LEDS_PROGRAM_KEEP, LEDS_PROGRAM_UPDATE };
