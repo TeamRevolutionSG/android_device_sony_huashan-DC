@@ -48,25 +48,25 @@ const int leds_map[3][3]                               = { { 6, 3, 0 }, { 7, 4, 
 
 /* ===================================================================== */
 /* === LibLights AS3665 Sequencer === */
-char const*const LEDS_SEQUENCER1_MODE_FILE             = "/sys/devices/i2c-10/10-0047/sequencer1_mode";
-char const*const LEDS_SEQUENCER2_MODE_FILE             = "/sys/devices/i2c-10/10-0047/sequencer2_mode";
-char const*const LEDS_SEQUENCER3_MODE_FILE             = "/sys/devices/i2c-10/10-0047/sequencer3_mode";
-char const*const LEDS_SEQUENCER1_RUN_FILE              = "/sys/devices/i2c-10/10-0047/sequencer1_run_mode";
-char const*const LEDS_SEQUENCER2_RUN_FILE              = "/sys/devices/i2c-10/10-0047/sequencer2_run_mode";
-char const*const LEDS_SEQUENCER3_RUN_FILE              = "/sys/devices/i2c-10/10-0047/sequencer3_run_mode";
-char const*const LEDS_SEQUENCER_LOAD_FILE              = "/sys/devices/i2c-10/10-0047/sequencer_load";
+char const*const LEDS_SEQ1_MODE_FILE                   = "/sys/devices/i2c-10/10-0047/sequencer1_mode";
+char const*const LEDS_SEQ2_MODE_FILE                   = "/sys/devices/i2c-10/10-0047/sequencer2_mode";
+char const*const LEDS_SEQ3_MODE_FILE                   = "/sys/devices/i2c-10/10-0047/sequencer3_mode";
+char const*const LEDS_SEQ1_RUN_FILE                    = "/sys/devices/i2c-10/10-0047/sequencer1_run_mode";
+char const*const LEDS_SEQ2_RUN_FILE                    = "/sys/devices/i2c-10/10-0047/sequencer2_run_mode";
+char const*const LEDS_SEQ3_RUN_FILE                    = "/sys/devices/i2c-10/10-0047/sequencer3_run_mode";
+char const*const LEDS_SEQ_LOAD_FILE                    = "/sys/devices/i2c-10/10-0047/sequencer_load";
 
 /* ===================================================================== */
 /* === LibLights AS3665 Sequencer === */
-#define LEDS_SEQUENCER_BLINK_CMD_NONE                    0
-#define LEDS_SEQUENCER_BLINK_RAMPUP_SMOOTH               2
-#define LEDS_SEQUENCER_BLINK_RAMPDOWN_SMOOTH             3
-char const*const LEDS_SEQUENCER_LOAD_PROGRAM           = "000e0e9d009c0e9c8f9d80%02xff9dc0%02xff9d80%02xff9dc0%02xff9d80a004c00000000%03x\n";
-char const*const LEDS_SEQUENCER_MODE_DISABLED          = "disabled";
-char const*const LEDS_SEQUENCER_MODE_ACTIVATED         = "reload";
-char const*const LEDS_SEQUENCER_RUN_DISABLED           = "hold";
-char const*const LEDS_SEQUENCER_RUN_ACTIVATED          = "run";
-const float LEDS_SEQUENCER_SECOND_TIME                 = 13.0;
+#define LEDS_SEQ_BLINK_NONE                              0
+#define LEDS_SEQ_BLINK_RAMPUP_SMOOTH                     2
+#define LEDS_SEQ_BLINK_RAMPDOWN_SMOOTH                   3
+char const*const LEDS_SEQ_LOAD_PROGRAM                 = "000e0e9d009c0e9c8f9d80%02xff9dc0%02xff9d80%02xff9dc0%02xff9d80a004c00000000%03x\n";
+char const*const LEDS_SEQ_MODE_DISABLED                = "disabled";
+char const*const LEDS_SEQ_MODE_ACTIVATED               = "reload";
+char const*const LEDS_SEQ_RUN_DISABLED                 = "hold";
+char const*const LEDS_SEQ_RUN_ACTIVATED                = "run";
+const float LEDS_SEQ_SECOND_TIME                       = 13.0;
 
 /* ===================================================================== */
 /* === Module AS3665 Sequence details === */
