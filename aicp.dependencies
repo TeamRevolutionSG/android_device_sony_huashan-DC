@@ -5,11 +5,6 @@
     "branch":      "cm-12.1"
   },
   {
-    "repository": "CyanogenMod/android_device_qcom_common",
-    "target_path": "device/qcom/common"
-    "branch":      "cm-12.1"
-  },
-  {
     "repository": "AdrianDC/android_kernel_sony_msm8x60",
     "target_path": "kernel/sony/msm8x60",
     "branch":      "cm-12.1_clean"
