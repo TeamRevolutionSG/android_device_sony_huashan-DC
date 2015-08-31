@@ -1,7 +1,12 @@
 [
   {
-    "repository": "Mrcl1450/android_hardware_sony_thermanager",
-    "target_path": "hardware/sony/thermanager",
+    "repository": "CyanogenMod/android_device_sony_common",
+    "target_path": "device/sony/common",
+    "branch":      "cm-12.1"
+  },
+  {
+    "repository": "CyanogenMod/android_device_qcom_common",
+    "target_path": "device/qcom/common"
     "branch":      "cm-12.1"
   },
   {
@@ -15,13 +20,13 @@
     "branch":      "cm-12.1"
   },
   {
-    "repository": "CyanogenMod/android_device_sony_common",
-    "target_path": "device/sony/common",
+    "repository": "CyanogenMod/android_hardware_sony_DASH",
+    "target_path": "hardware/sony/DASH",
     "branch":      "cm-12.1"
   },
   {
-    "repository": "CyanogenMod/android_hardware_sony_DASH",
-    "target_path": "hardware/sony/DASH",
+    "repository": "Mrcl1450/android_hardware_sony_thermanager",
+    "target_path": "hardware/sony/thermanager",
     "branch":      "cm-12.1"
   },
   {
