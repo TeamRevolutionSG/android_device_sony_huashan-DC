@@ -57,8 +57,8 @@ on init
     mkdir /dev/bus/usb 0755 root root
 
     # Adaptive LMK
-    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
-    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 0
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 32768
 
 on fs
     mount_all  ./fstab.qcom
@@ -180,7 +180,8 @@ on boot
     chmod 660 /dev/rtc0
     chown system system /dev/rtc0
 
-    write /proc/sys/vm/swappiness 0
+    #Swap pages only on OOM condition
+    #write /proc/sys/vm/swappiness 0
 
     # Flash storage isn't a good entropy source, and only causes locking
     # overhead in the kernel. Turn it off.
@@ -190,7 +191,9 @@ on boot
     # Set up KSM
     write /sys/kernel/mm/ksm/sleep_millisecs 500
     write /sys/kernel/mm/ksm/run 1
-    write /sys/kernel/mm/ksm/deferred_timer 1
+    #We have more cpu power than memory so sacrifice cpu for memory
+    #write /sys/kernel/mm/ksm/deferred_timer 1
+    write /sys/kernel/mm/ksm/pages_to_scan 100
 
 # Assign TCP buffer thresholds to be ceiling value of technology maximums
 # Increased technology maximums should be reflected here.
