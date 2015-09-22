@@ -183,12 +183,12 @@ on boot
 
     write /proc/sys/vm/swappiness 0
 
-# Assign TCP buffer thresholds to be ceiling value of technology maximums
-# Increased technology maximums should be reflected here.
+    # Assign TCP buffer thresholds to be ceiling value of technology maximums
+    # Increased technology maximums should be reflected here.
     write /proc/sys/net/core/rmem_max  2097152
     write /proc/sys/net/core/wmem_max  2097152
 
-# Tune buffersize for higher Miracast throughput
+    # Tune buffersize for higher Miracast throughput
     setprop net.tcp.buffersize.wifi 524288,1048576,2560000,524288,1048576,2560000
 
     #To allow interfaces to get v6 address when tethering is enabled
@@ -220,6 +220,11 @@ on boot
     # connections on high-throughput links get dropped when
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
+
+on charger
+    stop bootlogo
+    setprop persist.sys.usb.config charging
+    mount_all ./fstab.qcom
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -474,6 +479,7 @@ service thermanager /system/bin/thermanager /system/etc/thermanager.xml
 # Healthd
 service charger /sbin/healthd -c
     class charger
+    critical
     seclabel u:r:healthd:s0
 
 service rmt_storage /system/bin/rmt_storage
