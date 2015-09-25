@@ -78,34 +78,58 @@ echo '92' > $LED1_R_CURRENT_FILE
 echo '92' > $LED2_G_CURRENT_FILE
 echo '92' > $LED3_B_CURRENT_FILE
 busybox sleep 0.20
+echo '0' > $LED1_R_CURRENT_FILE
+echo '0' > $LED2_G_CURRENT_FILE
+echo '0' > $LED3_B_CURRENT_FILE
 echo '92' > $LED1_B_CURRENT_FILE
 echo '92' > $LED2_R_CURRENT_FILE
 echo '92' > $LED3_G_CURRENT_FILE
 busybox sleep 0.20
+echo '0' > $LED1_B_CURRENT_FILE
+echo '0' > $LED2_R_CURRENT_FILE
+echo '0' > $LED3_G_CURRENT_FILE
 echo '92' > $LED1_G_CURRENT_FILE
 echo '92' > $LED2_B_CURRENT_FILE
 echo '92' > $LED3_R_CURRENT_FILE
 busybox sleep 0.20
+echo '0' > $LED1_G_CURRENT_FILE
+echo '0' > $LED2_B_CURRENT_FILE
+echo '0' > $LED3_R_CURRENT_FILE
 echo '92' > $LED1_R_CURRENT_FILE
 echo '92' > $LED2_G_CURRENT_FILE
 echo '92' > $LED3_B_CURRENT_FILE
 busybox sleep 0.20
+echo '0' > $LED1_R_CURRENT_FILE
+echo '0' > $LED2_G_CURRENT_FILE
+echo '0' > $LED3_B_CURRENT_FILE
 echo '92' > $LED1_B_CURRENT_FILE
 echo '92' > $LED2_R_CURRENT_FILE
 echo '92' > $LED3_G_CURRENT_FILE
 busybox sleep 0.20
+echo '0' > $LED1_B_CURRENT_FILE
+echo '0' > $LED2_R_CURRENT_FILE
+echo '0' > $LED3_G_CURRENT_FILE
 echo '92' > $LED1_G_CURRENT_FILE
 echo '92' > $LED2_B_CURRENT_FILE
 echo '92' > $LED3_R_CURRENT_FILE
 busybox sleep 0.20
+echo '0' > $LED1_G_CURRENT_FILE
+echo '0' > $LED2_B_CURRENT_FILE
+echo '0' > $LED3_R_CURRENT_FILE
 echo '92' > $LED1_R_CURRENT_FILE
 echo '92' > $LED2_G_CURRENT_FILE
 echo '92' > $LED3_B_CURRENT_FILE
 busybox sleep 0.20
+echo '0' > $LED1_R_CURRENT_FILE
+echo '0' > $LED2_G_CURRENT_FILE
+echo '0' > $LED3_B_CURRENT_FILE
 echo '92' > $LED1_B_CURRENT_FILE
 echo '92' > $LED2_R_CURRENT_FILE
 echo '92' > $LED3_G_CURRENT_FILE
 busybox sleep 0.20
+echo '0' > $LED1_B_CURRENT_FILE
+echo '0' > $LED2_R_CURRENT_FILE
+echo '0' > $LED3_G_CURRENT_FILE
 echo '92' > $LED1_G_CURRENT_FILE
 echo '92' > $LED2_B_CURRENT_FILE
 echo '92' > $LED3_R_CURRENT_FILE
