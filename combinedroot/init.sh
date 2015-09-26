@@ -169,10 +169,6 @@ if [ -s /dev/keycheck ] || busybox grep -q warmboot=0x77665502 /proc/cmdline ; t
 	echo '255' > $LED1_R_BRIGHTNESS_FILE
 	echo '255' > $LED2_R_BRIGHTNESS_FILE
 	echo '255' > $LED3_R_BRIGHTNESS_FILE
-	echo '32' > $LED1_R_CURRENT_FILE
-	echo '32' > $LED2_R_CURRENT_FILE
-	echo '32' > $LED3_R_CURRENT_FILE
-	busybox sleep 0.05
 	echo '64' > $LED1_R_CURRENT_FILE
 	echo '64' > $LED2_R_CURRENT_FILE
 	echo '64' > $LED3_R_CURRENT_FILE
@@ -180,14 +176,18 @@ if [ -s /dev/keycheck ] || busybox grep -q warmboot=0x77665502 /proc/cmdline ; t
 	echo '128' > $LED1_R_CURRENT_FILE
 	echo '128' > $LED2_R_CURRENT_FILE
 	echo '128' > $LED3_R_CURRENT_FILE
-	busybox sleep 1
+	busybox sleep 0.50
+	echo '0' > $LED1_R_CURRENT_FILE
+	echo '0' > $LED2_R_CURRENT_FILE
+	echo '0' > $LED3_R_CURRENT_FILE
+	busybox sleep 0.50
+	echo '128' > $LED1_R_CURRENT_FILE
+	echo '128' > $LED2_R_CURRENT_FILE
+	echo '128' > $LED3_R_CURRENT_FILE
+	busybox sleep 0.50
 	echo '64' > $LED1_R_CURRENT_FILE
 	echo '64' > $LED2_R_CURRENT_FILE
 	echo '64' > $LED3_R_CURRENT_FILE
-	busybox sleep 0.05
-	echo '32' > $LED1_R_CURRENT_FILE
-	echo '32' > $LED2_R_CURRENT_FILE
-	echo '32' > $LED3_R_CURRENT_FILE
 	busybox sleep 0.05
 	echo '0' > $LED1_R_BRIGHTNESS_FILE
 	echo '0' > $LED2_R_BRIGHTNESS_FILE
