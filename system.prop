@@ -15,6 +15,9 @@ persist.gps.qmienabled=true
 
 hw.fm.internal_antenna=true
 
+# ART
+dalvik.vm.dex2oat-flags=--no-watch-dog
+
 # hardware info
 ro.device.chipset=Qualcomm MSM8960T Snapdragon S4 Pro
 ro.device.cpu=Dual-core 1.7 GHz Krait
