@@ -197,7 +197,8 @@ PRODUCT_PACKAGES += \
     camera.msm8960 \
     camera.qcom \
     libmmcamera_interface \
-    libmmcamera_interface2
+    libmmcamera_interface2 \
+    CameraNext
 
 # Healthd
 PRODUCT_PACKAGES += \
