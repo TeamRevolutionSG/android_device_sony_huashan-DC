@@ -20,11 +20,6 @@
     "branch":      "cm-12.1"
   },
   {
-    "repository": "Mrcl1450/android_hardware_sony_thermanager",
-    "target_path": "hardware/sony/thermanager",
-    "branch":      "cm-12.1"
-  },
-  {
     "repository": "AICP/proprietary_vendor_sony",
     "target_path": "vendor/sony",
     "branch":      "lp5.1"
