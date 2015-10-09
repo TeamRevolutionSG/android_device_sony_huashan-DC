@@ -239,6 +239,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     power.qcom
 
+# QuickBoot
+PRODUCT_PACKAGES += \
+    QuickBoot
+
 # Thermal management
 PRODUCT_PACKAGES += \
     thermanager
