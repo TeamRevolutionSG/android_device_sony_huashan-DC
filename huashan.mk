@@ -39,6 +39,7 @@ PRODUCT_COPY_FILES += \
 # Device specific init scripts
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/init.qcom.rc:root/init.qcom.rc \
+    $(LOCAL_PATH)/rootdir/init.qcom.power.rc:root/init.qcom.power.rc \
     $(LOCAL_PATH)/rootdir/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/rootdir/fstab.qcom:root/fstab.qcom \
     $(LOCAL_PATH)/rootdir/fstab.qcom:recovery/root/fstab.qcom \
@@ -105,9 +106,9 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/hw_config.sh:system/etc/hw_config.sh
 
-# Sony system_monitor
+# Thermal monitor configuration
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/etc/sysmon.cfg:system/etc/sysmon.cfg
+    $(LOCAL_PATH)/rootdir/system/etc/thermanager.xml:system/etc/thermanager.xml
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf
@@ -197,8 +198,7 @@ PRODUCT_PACKAGES += \
     camera.msm8960 \
     camera.qcom \
     libmmcamera_interface \
-    libmmcamera_interface2 \
-    CameraNext
+    libmmcamera_interface2
 
 # Healthd
 PRODUCT_PACKAGES += \
@@ -238,6 +238,14 @@ PRODUCT_PACKAGES += \
 # Power
 PRODUCT_PACKAGES += \
     power.qcom
+
+# QuickBoot
+PRODUCT_PACKAGES += \
+    QuickBoot
+
+# Thermal management
+PRODUCT_PACKAGES += \
+    thermanager
 
 # Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -301,6 +309,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wlan.driver.ath=0 \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=15
+
+# VM Config
+PRODUCT_PROPERTY_OVERRIDES += \
+	dalvik.vm.checkjni=false \
+	dalvik.vm.dex2oat-filter=everything \
+	dalvik.vm.image-dex2oat-filter=everything \
+	dalvik.vm.isa.arm.features=lpae,div \
+	ro.kernel.android.checkjni=0
 
 # Do not power down SIM card when modem is sent to Low Power Mode.
 PRODUCT_PROPERTY_OVERRIDES += \
