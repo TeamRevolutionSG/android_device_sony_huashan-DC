@@ -320,3 +320,5 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-1024-dalvi
 # Include non-opensource parts
 $(call inherit-product, vendor/sony/huashan/huashan-vendor.mk)
 
+# Low RAM Config
+PRODUCT_PROPERTY_OVERRIDES += ro.config.low_ram=true
