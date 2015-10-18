@@ -32,7 +32,7 @@ import java.io.IOException;
 
 public class GloveModeService extends Service {
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     public static final String TAG = "GloveModeService";
 
     private static final String GLOVE_PATH = "/sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity";
