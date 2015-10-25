@@ -104,8 +104,8 @@ TARGET_POWERHAL_VARIANT := qcom
 CM_POWERHAL_EXTENSION := qcom
 
 # RIL
-BOARD_PROVIDES_LIBRIL := true
-BOARD_RIL_CLASS := ../../../device/sony/huashan/ril/
+#BOARD_PROVIDES_LIBRIL := true
+#BOARD_RIL_CLASS := ../../../device/sony/huashan/ril/
 
 # Healthd
 BOARD_CHARGER_ENABLE_SUSPEND := true
