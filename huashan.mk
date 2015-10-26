@@ -40,11 +40,13 @@ PRODUCT_COPY_FILES += \
 # Device specific init scripts
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/init.qcom.rc:root/init.qcom.rc \
+    $(LOCAL_PATH)/rootdir/init.qcom.power.rc:root/init.qcom.power.rc \
     $(LOCAL_PATH)/rootdir/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/rootdir/fstab.qcom:root/fstab.qcom \
     $(LOCAL_PATH)/rootdir/fstab.qcom:recovery/root/fstab.qcom \
     $(LOCAL_PATH)/rootdir/init.recovery.qcom.rc:root/init.recovery.qcom.rc \
     $(LOCAL_PATH)/rootdir/system/etc/init.qcom.bt.sh:system/etc/init.qcom.bt.sh \
+    $(LOCAL_PATH)/rootdir/system/etc/init.qcom.fm.sh:system/etc/init.qcom.fm.sh \
     $(LOCAL_PATH)/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
 # Additional sbin stuff
@@ -125,6 +127,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     extract_elf_ramdisk
 
+# BoringSSL compatability wrapper
+PRODUCT_PACKAGES += \
+    libboringssl-compat
+
+# Build libstlport for legacy blobs
+PRODUCT_PACKAGES += \
+    libstlport
+
 # NFCEE access control
 ifeq ($(TARGET_BUILD_VARIANT),user)
     NFCEE_ACCESS_PATH := $(LOCAL_PATH)/rootdir/system/etc/nfcee_access.xml
@@ -133,13 +143,6 @@ else
 endif
 PRODUCT_COPY_FILES += \
     $(NFCEE_ACCESS_PATH):system/etc/nfcee_access.xml
-
-# Media
-PRODUCT_PACKAGES += \
-    qcmediaplayer
-
-PRODUCT_BOOT_JARS += \
-    qcmediaplayer
 
 # Omx
 PRODUCT_PACKAGES += \
@@ -180,6 +183,13 @@ PRODUCT_PACKAGES += \
     audio.r_submix.default \
     libaudio-resampler \
     tinymix
+
+# FM radio
+#PRODUCT_PACKAGES += \
+    #FM2 \
+    #FMRecord \
+    #libqcomfm_jni \
+    #qcom.fmradio
 
 # Bluetooth
 PRODUCT_PACKAGES += \
@@ -273,7 +283,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # ART
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-flags=--no-watch-dog \
-    dalvik.vm.dex2oat-swap=false
+    dalvik.vm.dex2oat-swap=false \
+    ro.sys.fw.dex2oat_thread_count=3
 
 # QCOM
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -315,5 +326,3 @@ $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-1024-dalvi
 # Include non-opensource parts
 $(call inherit-product, vendor/sony/huashan/huashan-vendor.mk)
 
-# Low RAM Config
-PRODUCT_PROPERTY_OVERRIDES += ro.config.low_ram=true

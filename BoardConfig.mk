@@ -36,7 +36,7 @@ BOARD_VENDOR_PLATFORM := viskan
 # Kernel information
 BOARD_KERNEL_BASE  := 0x80200000
 BOARD_KERNEL_PAGESIZE := 2048
-BOARD_KERNEL_CMDLINE  := androidboot.hardware=qcom user_debug=31 androidboot.baseband=msm msm_rtb.filter=0x3F ehci-hcd.park=3 vmalloc=400M androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE  := androidboot.hardware=qcom androidboot.baseband=msm user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 vmalloc=340M androidboot.selinux=permissive
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000
 
 TARGET_NO_BOOTLOADER := true
@@ -104,8 +104,8 @@ TARGET_POWERHAL_VARIANT := qcom
 CM_POWERHAL_EXTENSION := qcom
 
 # RIL
-BOARD_PROVIDES_LIBRIL := true
-BOARD_RIL_CLASS := ../../../device/sony/huashan/ril/
+#BOARD_PROVIDES_LIBRIL := true
+#BOARD_RIL_CLASS := ../../../device/sony/huashan/ril/
 
 # Healthd
 BOARD_CHARGER_ENABLE_SUSPEND := true
@@ -159,8 +159,8 @@ BOARD_USES_SEPERATED_AUDIO_INPUT := true
 BOARD_USES_SEPERATED_VOICE_SPEAKER_MIC := true
 
 # FM Radio
-QCOM_FM_ENABLED := true
-AUDIO_FEATURE_ENABLED_FM := true
+#QCOM_FM_ENABLED := true
+#AUDIO_FEATURE_ENABLED_FM := true
 
 # Font expansion
 EXTENDED_FONT_FOOTPRINT := true
