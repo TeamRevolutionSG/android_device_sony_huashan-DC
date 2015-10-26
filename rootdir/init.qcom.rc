@@ -111,11 +111,7 @@ on boot
     # BT DUN port-bridge
     chmod 0660 /dev/smd7
     chown bluetooth bluetooth /dev/smd7
-
-    # FM
-    chmod 0644 /dev/radio0
-    chown fm_radio fm_radio /dev/radio0
-
+	
     chmod 0444 /sys/devices/platform/msm_hsusb/gadget/usb_state
 
     # Remove write permissions to video related nodes
