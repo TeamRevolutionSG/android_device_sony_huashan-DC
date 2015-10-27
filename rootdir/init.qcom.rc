@@ -24,7 +24,7 @@ on early-init
 
 on init
     # Preload the BoringSSL wrapper
-    export LD_PRELOAD "/system/lib64/libboringssl-compat.so"
+    export LD_PRELOAD "/system/lib/libboringssl-compat.so"
 
     mkdir /dev/bus 0755 root root
     mkdir /dev/bus/usb 0755 root root
