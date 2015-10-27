@@ -107,7 +107,7 @@ BOARD_PROVIDES_LIBRIL := true
 BOARD_RIL_CLASS := ../../../device/sony/huashan/ril/
 
 # Healthd
-BOARD_CHARGER_ENABLE_SUSPEND := true
+#BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_SHOW_PERCENTAGE := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 BOARD_HEALTHD_CUSTOM_CHARGER_RES := device/sony/huashan/charger/images
