@@ -206,6 +206,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     camera.sony \
     camera.msm8960 \
+    camera.qcom \
     libmmcamera_interface \
     libmmcamera_interface2
 
