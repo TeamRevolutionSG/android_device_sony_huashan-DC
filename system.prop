@@ -14,3 +14,9 @@ persist.timed.enable=true
 persist.gps.qmienabled=true
 
 hw.fm.internal_antenna=true
+
+# For userdebug builds
+ro.secure=0
+ro.adb.secure=0
+ro.debuggable=1
+persist.service.adb.enable=1
