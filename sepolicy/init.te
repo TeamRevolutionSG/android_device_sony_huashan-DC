@@ -1,9 +1,2 @@
-allow init self:process execmem;
-
-# property=sf.lcd_density
-allow init_shell display_prop:property_service set;
-
-# property=ctl.quipc_igsn
-allow init_shell ctl_quipc_prop:property_service set;
-
-allow init kernel:system syslog_read;
+allow init diag_device:chr_file unlink;
+allow init tmpfs:lnk_file create_file_perms;

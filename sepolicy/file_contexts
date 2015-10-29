@@ -1,25 +1,91 @@
-# Gpu
-/dev/kgsl-2d0                       u:object_r:gpu_device:s0
-/dev/kgsl-2d1                       u:object_r:gpu_device:s0
+# GPU device (world r/w)
+/dev/kgsl           u:object_r:gpu_device:s0
 
-# Camera
-/dev/gemini.*                       u:object_r:camera_device:s0
-/data/etc/flashled_vf_factory       u:object_r:camera_data_file:s0
+/dev/bcm2079x-i2c                  u:object_r:nfc_device:s0
 
-# Wifi
-/data/etc/wlan_macaddr[0-3]         u:object_r:wifi_data_file:s0
+# CPU governor controls
+/dev/socket/mpdecision(/.*)?           u:object_r:mpdecision_socket:s0
 
-# Bluetooth
-/data/etc/bluetooth_bdaddr          u:object_r:bluetooth_data_file:s0
+## Radio related
+# high speed inter-chip controls
+/dev/hsicctl[0-3]                      u:object_r:radio_device:s0
+# mux controller
+/dev/rmnet_mux_ctrl                    u:object_r:radio_device:s0
+# qmi protocol driver
+/dev/qmi[0-2]                          u:object_r:radio_device:s0
+# shared memory drivers
+/dev/smdcntl[0-7]                      u:object_r:radio_device:s0
+/dev/smd7                              u:object_r:radio_device:s0
 
-# Vibrator
-/sys/devices/virtual/timed_output/vibrator/level      u:object_r:sysfs_vibrator:s0
+# Bluetooth shared memory interfaces
+/dev/smd2                              u:object_r:hci_attach_dev:s0
+/dev/smd3                              u:object_r:hci_attach_dev:s0
 
-# System binaries
-/system/bin/setup_fs                u:object_r:setup_fs_exec:s0
-/system/bin/secchand                u:object_r:secchand_exec:s0
-/system/bin/thermanager             u:object_r:thermanager_exec:s0
-/system/bin/mac-update              u:object_r:mac_update_exec:s0
-/system/bin/updatemiscta            u:object_r:updatemiscta_exec:s0
-/system/bin/ta_qmi_service          u:object_r:ta_qmi_service_exec:s0
-/system/bin/tad_static              u:object_r:tad_static_exec:s0
+# Serial console
+/dev/ttyHS0                            u:object_r:hci_attach_dev:s0
+/dev/ttyMSM0                           u:object_r:hci_attach_dev:s0
+
+# Serial-to-Usb support
+/dev/ttyUSB0                           u:object_r:radio_device:s0
+
+# Jpeg Engine support
+/dev/gemini.*                          u:object_r:camera_device:s0
+# MSM camera related
+/dev/video([0-9])+                     u:object_r:camera_device:s0
+
+# Qualcomm MSM Audio devices
+/dev/msm_acdb                      u:object_r:audio_device:s0
+/dev/msm_mp3                       u:object_r:audio_device:s0
+/dev/msm_rtac                      u:object_r:audio_device:s0
+/dev/msm_vidc.*                    u:object_r:audio_device:s0
+/dev/msm_amrnb.*                   u:object_r:audio_device:s0
+/dev/msm_amrwb.*                   u:object_r:audio_device:s0
+/dev/msm_aac.*                     u:object_r:audio_device:s0
+
+# Sensors shared Memory Packet Interface
+/dev/smd_sns_dsps                      u:object_r:sensors_device:s0
+
+/system/bin/efsks                  u:object_r:kickstart_exec:s0
+
+# Block labeling
+/dev/block/platform/msm_sdcc\.1/by-name/m9kefs[12]    u:object_r:efs_block_device:s0
+/dev/block/mmcblk0                 u:object_r:root_block_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/system u:object_r:system_block_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/recovery u:object_r:recovery_block_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/userdata u:object_r:userdata_block_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/cache u:object_r:cache_block_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/metadata u:object_r:metadata_block_device:s0
+/dev/block/platform/msm_sdcc\.1/by-name/boot u:object_r:boot_block_device:s0
+
+/data/cam_socket[0-9]              u:object_r:camera_socket:s0
+/data/app/sensor_ctl_socket        u:object_r:sensors_socket:s0
+
+/data/misc/playready(/.*)?         u:object_r:drm_data_file:s0
+/data/fdAlbum                      u:object_r:camera_data_file:s0
+
+/system/bin/hci_qcomm_init         u:object_r:hci_attach_exec:s0
+/system/bin/bdAddrLoader           u:object_r:bluetooth_loader_exec:s0
+/system/bin/bridgemgrd             u:object_r:bridge_exec:s0
+/system/bin/sensors\.qcom           u:object_r:sensors_exec:s0
+/system/bin/conn_init              u:object_r:conn_init_exec:s0
+/system/bin/init\.mako\.bt\.sh     u:object_r:bluetooth_loader_exec:s0
+/system/bin/init\.mako\.wifi\.sh   u:object_r:conn_init_exec:s0
+
+# Persist firmware filesystem
+/persist/bluetooth(/.*)?         u:object_r:persist_bluetooth_file:s0
+/persist/playready(/.*)?         u:object_r:persist_drm_file:s0
+/persist/widevine(/.*)?          u:object_r:persist_drm_file:s0
+/persist/wifi(/.*)?              u:object_r:persist_wifi_file:s0
+
+# Sysfs entry for the RmNet function driver
+/sys/class/android_usb/f_rmnet_smd_sdio/transport  --  u:object_r:sysfs_rmnet:s0
+/sys/devices/virtual/android_usb/android0/f_rmnet_smd_sdio/transport  --  u:object_r:sysfs_rmnet:s0
+
+# Sysfs files used by mpdecision
+/sys/module/pm2/modes(/.*)?            u:object_r:sysfs_mpdecision:s0
+/sys/module/pm_8x60/modes(/.*)?        u:object_r:sysfs_mpdecision:s0
+
+# Hardware tunables
+/sys/devices/platform/kcal_ctrl.0(/.*)?        -- u:object_r:sysfs_hardware:s0
+/sys/devices/platform/mipi_lgit.1537(/.*)?     -- u:object_r:sysfs_hardware:s0
+/sys/class/timed_output/vibrator/amp           -- u:object_r:sysfs_hardware:s0
