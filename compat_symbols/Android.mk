@@ -17,7 +17,7 @@ include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
     huashan_log.c \
-    MemoryBase.cpp
+    VectorImpl.cpp
 
 LOCAL_SHARED_LIBRARIES := libbinder
 LOCAL_MODULE := libcompat_symbols
