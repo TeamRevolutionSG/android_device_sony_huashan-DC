@@ -57,7 +57,6 @@ on init
 
 on fs
     mount_all ./fstab.qcom
-    swapon_all ./fstab.qcom
     setprop ro.crypto.fuse_sdcard true
 
     mkdir /lta-label 0555 system system
