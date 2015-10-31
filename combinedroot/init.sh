@@ -47,147 +47,75 @@ busybox mount -t proc proc /proc
 busybox mount -t sysfs sysfs /sys
 
 # keycheck
-busybox echo '50' > /sys/class/timed_output/vibrator/enable
 busybox cat ${BOOTREC_EVENT} > /dev/keycheck&
 
-# LEDs activated
-echo '255' > $LED1_G_BRIGHTNESS_FILE
-echo '255' > $LED2_G_BRIGHTNESS_FILE
-echo '255' > $LED3_G_BRIGHTNESS_FILE
-echo '255' > $LED1_R_BRIGHTNESS_FILE
-echo '255' > $LED2_R_BRIGHTNESS_FILE
-echo '255' > $LED3_R_BRIGHTNESS_FILE
-echo '255' > $LED1_B_BRIGHTNESS_FILE
-echo '255' > $LED2_B_BRIGHTNESS_FILE
-echo '255' > $LED3_B_BRIGHTNESS_FILE
+# recovery boot
+RECOVERY_BOOT=$(busybox grep warmboot=0x77665502 /proc/cmdline)
 
-# LEDs starting animation
-echo '16' > $LED1_R_CURRENT_FILE
-echo '16' > $LED2_G_CURRENT_FILE
-echo '16' > $LED3_B_CURRENT_FILE
-busybox sleep 0.07
-echo '32' > $LED1_R_CURRENT_FILE
-echo '32' > $LED2_G_CURRENT_FILE
-echo '32' > $LED3_B_CURRENT_FILE
-busybox sleep 0.07
-echo '64' > $LED1_R_CURRENT_FILE
-echo '64' > $LED2_G_CURRENT_FILE
-echo '64' > $LED3_B_CURRENT_FILE
-busybox sleep 0.07
-echo '92' > $LED1_R_CURRENT_FILE
-echo '92' > $LED2_G_CURRENT_FILE
-echo '92' > $LED3_B_CURRENT_FILE
-busybox sleep 0.20
-echo '0' > $LED1_R_CURRENT_FILE
-echo '0' > $LED2_G_CURRENT_FILE
-echo '0' > $LED3_B_CURRENT_FILE
-echo '92' > $LED1_B_CURRENT_FILE
-echo '92' > $LED2_R_CURRENT_FILE
-echo '92' > $LED3_G_CURRENT_FILE
-busybox sleep 0.20
-echo '0' > $LED1_B_CURRENT_FILE
-echo '0' > $LED2_R_CURRENT_FILE
-echo '0' > $LED3_G_CURRENT_FILE
-echo '92' > $LED1_G_CURRENT_FILE
-echo '92' > $LED2_B_CURRENT_FILE
-echo '92' > $LED3_R_CURRENT_FILE
-busybox sleep 0.20
-echo '0' > $LED1_G_CURRENT_FILE
-echo '0' > $LED2_B_CURRENT_FILE
-echo '0' > $LED3_R_CURRENT_FILE
-echo '92' > $LED1_R_CURRENT_FILE
-echo '92' > $LED2_G_CURRENT_FILE
-echo '92' > $LED3_B_CURRENT_FILE
-busybox sleep 0.20
-echo '0' > $LED1_R_CURRENT_FILE
-echo '0' > $LED2_G_CURRENT_FILE
-echo '0' > $LED3_B_CURRENT_FILE
-echo '92' > $LED1_B_CURRENT_FILE
-echo '92' > $LED2_R_CURRENT_FILE
-echo '92' > $LED3_G_CURRENT_FILE
-busybox sleep 0.20
-echo '0' > $LED1_B_CURRENT_FILE
-echo '0' > $LED2_R_CURRENT_FILE
-echo '0' > $LED3_G_CURRENT_FILE
-echo '92' > $LED1_G_CURRENT_FILE
-echo '92' > $LED2_B_CURRENT_FILE
-echo '92' > $LED3_R_CURRENT_FILE
-busybox sleep 0.20
-echo '0' > $LED1_G_CURRENT_FILE
-echo '0' > $LED2_B_CURRENT_FILE
-echo '0' > $LED3_R_CURRENT_FILE
-echo '92' > $LED1_R_CURRENT_FILE
-echo '92' > $LED2_G_CURRENT_FILE
-echo '92' > $LED3_B_CURRENT_FILE
-busybox sleep 0.20
-echo '0' > $LED1_R_CURRENT_FILE
-echo '0' > $LED2_G_CURRENT_FILE
-echo '0' > $LED3_B_CURRENT_FILE
-echo '92' > $LED1_B_CURRENT_FILE
-echo '92' > $LED2_R_CURRENT_FILE
-echo '92' > $LED3_G_CURRENT_FILE
-busybox sleep 0.20
-echo '0' > $LED1_B_CURRENT_FILE
-echo '0' > $LED2_R_CURRENT_FILE
-echo '0' > $LED3_G_CURRENT_FILE
-echo '92' > $LED1_G_CURRENT_FILE
-echo '92' > $LED2_B_CURRENT_FILE
-echo '92' > $LED3_R_CURRENT_FILE
-busybox sleep 0.07
-echo '64' > $LED1_G_CURRENT_FILE
-echo '64' > $LED2_B_CURRENT_FILE
-echo '64' > $LED3_R_CURRENT_FILE
-busybox sleep 0.07
-echo '32' > $LED1_G_CURRENT_FILE
-echo '32' > $LED2_B_CURRENT_FILE
-echo '32' > $LED3_R_CURRENT_FILE
-busybox sleep 0.05
-echo '16' > $LED1_G_CURRENT_FILE
-echo '16' > $LED2_B_CURRENT_FILE
-echo '16' > $LED3_R_CURRENT_FILE
-echo '0' > $LED1_G_BRIGHTNESS_FILE
-echo '0' > $LED2_G_BRIGHTNESS_FILE
-echo '0' > $LED3_G_BRIGHTNESS_FILE
-echo '0' > $LED1_R_BRIGHTNESS_FILE
-echo '0' > $LED2_R_BRIGHTNESS_FILE
-echo '0' > $LED3_R_BRIGHTNESS_FILE
-echo '0' > $LED1_B_BRIGHTNESS_FILE
-echo '0' > $LED2_B_BRIGHTNESS_FILE
-echo '0' > $LED3_B_BRIGHTNESS_FILE
-echo '0' > $LED1_G_CURRENT_FILE
-echo '0' > $LED2_B_CURRENT_FILE
-echo '0' > $LED3_R_CURRENT_FILE
-
-# android ramdisk
-load_image=/sbin/ramdisk.cpio
-
-# boot decision
-if [ -s /dev/keycheck ] || busybox grep -q warmboot=0x77665502 /proc/cmdline ; then
-	busybox echo 'RECOVERY BOOT' >>boot.txt
-	# LEDs for recovery
-	busybox echo '100' > /sys/class/timed_output/vibrator/enable
+# normal boot
+if [ -z "$RECOVERY_BOOT" ]; then
+	busybox echo '50' > /sys/class/timed_output/vibrator/enable
+	# LEDs activated
+	echo '255' > $LED1_G_BRIGHTNESS_FILE
+	echo '255' > $LED2_G_BRIGHTNESS_FILE
+	echo '255' > $LED3_G_BRIGHTNESS_FILE
 	echo '255' > $LED1_R_BRIGHTNESS_FILE
 	echo '255' > $LED2_R_BRIGHTNESS_FILE
 	echo '255' > $LED3_R_BRIGHTNESS_FILE
+	# LEDs starting animation
+	echo '16' > $LED1_G_CURRENT_FILE
+	echo '16' > $LED2_G_CURRENT_FILE
+	echo '16' > $LED3_G_CURRENT_FILE
+	busybox sleep 0.05
+	echo '32' > $LED1_G_CURRENT_FILE
+	echo '32' > $LED2_G_CURRENT_FILE
+	echo '32' > $LED3_G_CURRENT_FILE
+	busybox sleep 0.05
+	echo '64' > $LED1_G_CURRENT_FILE
+	echo '64' > $LED2_G_CURRENT_FILE
+	echo '64' > $LED3_G_CURRENT_FILE
+	busybox sleep 0.05
+	echo '92' > $LED1_G_CURRENT_FILE
+	echo '92' > $LED2_G_CURRENT_FILE
+	echo '92' > $LED3_G_CURRENT_FILE
+	busybox sleep 1
+	echo '64' > $LED1_G_CURRENT_FILE
+	echo '64' > $LED2_G_CURRENT_FILE
+	echo '64' > $LED3_G_CURRENT_FILE
+	busybox sleep 0.05
+	echo '32' > $LED1_G_CURRENT_FILE
+	echo '32' > $LED2_G_CURRENT_FILE
+	echo '32' > $LED3_G_CURRENT_FILE
+	busybox sleep 0.05
+	echo '0' > $LED1_G_BRIGHTNESS_FILE
+	echo '0' > $LED2_G_BRIGHTNESS_FILE
+	echo '0' > $LED3_G_BRIGHTNESS_FILE
+	echo '0' > $LED1_G_CURRENT_FILE
+	echo '0' > $LED2_G_CURRENT_FILE
+	echo '0' > $LED3_G_CURRENT_FILE
+	echo '16' > $LED1_R_CURRENT_FILE
+	echo '16' > $LED2_R_CURRENT_FILE
+	echo '16' > $LED3_R_CURRENT_FILE
+	busybox sleep 0.05
+	echo '32' > $LED1_R_CURRENT_FILE
+	echo '32' > $LED2_R_CURRENT_FILE
+	echo '32' > $LED3_R_CURRENT_FILE
+	busybox sleep 0.05
 	echo '64' > $LED1_R_CURRENT_FILE
 	echo '64' > $LED2_R_CURRENT_FILE
 	echo '64' > $LED3_R_CURRENT_FILE
 	busybox sleep 0.05
-	echo '128' > $LED1_R_CURRENT_FILE
-	echo '128' > $LED2_R_CURRENT_FILE
-	echo '128' > $LED3_R_CURRENT_FILE
-	busybox sleep 0.50
-	echo '0' > $LED1_R_CURRENT_FILE
-	echo '0' > $LED2_R_CURRENT_FILE
-	echo '0' > $LED3_R_CURRENT_FILE
-	busybox sleep 0.50
-	echo '128' > $LED1_R_CURRENT_FILE
-	echo '128' > $LED2_R_CURRENT_FILE
-	echo '128' > $LED3_R_CURRENT_FILE
-	busybox sleep 0.50
+	echo '92' > $LED1_R_CURRENT_FILE
+	echo '92' > $LED2_R_CURRENT_FILE
+	echo '92' > $LED3_R_CURRENT_FILE
+	busybox sleep 1
 	echo '64' > $LED1_R_CURRENT_FILE
 	echo '64' > $LED2_R_CURRENT_FILE
 	echo '64' > $LED3_R_CURRENT_FILE
+	busybox sleep 0.05
+	echo '32' > $LED1_R_CURRENT_FILE
+	echo '32' > $LED2_R_CURRENT_FILE
+	echo '32' > $LED3_R_CURRENT_FILE
 	busybox sleep 0.05
 	echo '0' > $LED1_R_BRIGHTNESS_FILE
 	echo '0' > $LED2_R_BRIGHTNESS_FILE
@@ -195,6 +123,45 @@ if [ -s /dev/keycheck ] || busybox grep -q warmboot=0x77665502 /proc/cmdline ; t
 	echo '0' > $LED1_R_CURRENT_FILE
 	echo '0' > $LED2_R_CURRENT_FILE
 	echo '0' > $LED3_R_CURRENT_FILE
+fi
+
+# android ramdisk
+load_image=/sbin/ramdisk.cpio
+
+# boot decision
+if [ -s /dev/keycheck ] || [ ! -z "$RECOVERY_BOOT" ]; then
+	busybox echo 'RECOVERY BOOT' >>boot.txt
+	# LEDs for recovery
+	busybox echo '100' > /sys/class/timed_output/vibrator/enable
+	echo '255' > $LED1_B_BRIGHTNESS_FILE
+	echo '255' > $LED2_B_BRIGHTNESS_FILE
+	echo '255' > $LED3_B_BRIGHTNESS_FILE
+	echo '32' > $LED1_B_CURRENT_FILE
+	echo '32' > $LED2_B_CURRENT_FILE
+	echo '32' > $LED3_B_CURRENT_FILE
+	busybox sleep 0.05
+	echo '64' > $LED1_B_CURRENT_FILE
+	echo '64' > $LED2_B_CURRENT_FILE
+	echo '64' > $LED3_B_CURRENT_FILE
+	busybox sleep 0.05
+	echo '128' > $LED1_B_CURRENT_FILE
+	echo '128' > $LED2_B_CURRENT_FILE
+	echo '128' > $LED3_B_CURRENT_FILE
+	busybox sleep 1
+	echo '64' > $LED1_B_CURRENT_FILE
+	echo '64' > $LED2_B_CURRENT_FILE
+	echo '64' > $LED3_B_CURRENT_FILE
+	busybox sleep 0.05
+	echo '32' > $LED1_B_CURRENT_FILE
+	echo '32' > $LED2_B_CURRENT_FILE
+	echo '32' > $LED3_B_CURRENT_FILE
+	busybox sleep 0.05
+	echo '0' > $LED1_B_BRIGHTNESS_FILE
+	echo '0' > $LED2_B_BRIGHTNESS_FILE
+	echo '0' > $LED3_B_BRIGHTNESS_FILE
+	echo '0' > $LED1_B_CURRENT_FILE
+	echo '0' > $LED2_B_CURRENT_FILE
+	echo '0' > $LED3_B_CURRENT_FILE
 	# recovery ramdisk
 	busybox mknod -m 600 ${BOOTREC_FOTA_NODE}
 	busybox mount -o remount,rw /

@@ -198,8 +198,7 @@ PRODUCT_PACKAGES += \
     camera.msm8960 \
     camera.qcom \
     libmmcamera_interface \
-    libmmcamera_interface2 \
-    CameraNext
+    libmmcamera_interface2
 
 # Healthd
 PRODUCT_PACKAGES += \
@@ -248,6 +247,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     thermanager
 
+# Low-RAM optimizations
+ADDITIONAL_BUILD_PROPERTIES += \
+    ro.config.low_ram=true \
+    persist.sys.force_highendgfx=true \
+    dalvik.vm.jit.codecachesize=0 \
+    config.disable_atlas=true \
+    ro.config.max_starting_bg=8 \
+    ro.sys.fw.bg_apps_limit=16
+
 # Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
@@ -267,15 +275,15 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.extension_library=libqti-perfd-client.so
 
+# Doze mode
+PRODUCT_PACKAGES += \
+    DeviceSettings
+
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=320 \
     debug.composition.type=c2d \
     persist.hwc.mdpcomp.enable=true
-
-# Doze mode
-PRODUCT_PACKAGES += \
-    SensorsDoze
 
 # DRM
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -310,14 +318,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     wlan.driver.ath=0 \
     wifi.interface=wlan0 \
     wifi.supplicant_scan_interval=15
-
-# VM Config
-PRODUCT_PROPERTY_OVERRIDES += \
-	dalvik.vm.checkjni=false \
-	dalvik.vm.dex2oat-filter=everything \
-	dalvik.vm.image-dex2oat-filter=everything \
-	dalvik.vm.isa.arm.features=lpae,div \
-	ro.kernel.android.checkjni=0
 
 # Do not power down SIM card when modem is sent to Low Power Mode.
 PRODUCT_PROPERTY_OVERRIDES += \
