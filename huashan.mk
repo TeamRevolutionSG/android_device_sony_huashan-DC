@@ -127,9 +127,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     extract_elf_ramdisk
 
-# BoringSSL compatability wrapper
+# Compatibility symbols wrappers
 PRODUCT_PACKAGES += \
-    libboringssl-compat
+    libboringssl-compat \
+    libcompat_symbols
 
 # Build libstlport for legacy blobs
 PRODUCT_PACKAGES += \
@@ -143,6 +144,13 @@ else
 endif
 PRODUCT_COPY_FILES += \
     $(NFCEE_ACCESS_PATH):system/etc/nfcee_access.xml
+
+# Media
+PRODUCT_PACKAGES += \
+    qcmediaplayer
+
+PRODUCT_BOOT_JARS += \
+    qcmediaplayer
 
 # Omx
 PRODUCT_PACKAGES += \

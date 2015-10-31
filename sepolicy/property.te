@@ -1,2 +1,3 @@
-type ctl_quipc_prop, property_type;
-type display_prop, property_type;
+type ctl_rmt_prop, property_type;
+type ctl_mpdecision, property_type;
+
