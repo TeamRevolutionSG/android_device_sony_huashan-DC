@@ -25,7 +25,7 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
 
 # Kernel properties
-TARGET_KERNEL_SOURCE := kernel/sony/msm8x60
+TARGET_KERNEL_SOURCE := kernel/sony/msm8960t
 TARGET_KERNEL_CONFIG := cm_viskan_huashan_defconfig
 
 # Platform
@@ -197,7 +197,7 @@ BOARD_SEPOLICY_UNION += \
     rild.te \
     sdcardd.te \
     secchand.te \
-    settings.device.te \
+    settings_device.te \
     setup_fs.te \
     shell.te \
     surfaceflinger.te \
