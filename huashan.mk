@@ -272,10 +272,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.ril_class=SonyRIL \
     rild.libpath=/system/lib/libril-qc-qmi-1.so
 
-# Perfd
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=libqti-perfd-client.so
-
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.sf.lcd_density=320 \
