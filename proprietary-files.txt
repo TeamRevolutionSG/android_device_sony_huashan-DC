@@ -203,8 +203,10 @@ vendor/lib/egl/libq3dtools_adreno.so
 vendor/lib/mediadrm/libwvdrmengine.so
 vendor/lib/libC2D2.so
 vendor/lib/libCB.so
+vendor/lib/libDivxDrm.so
 vendor/lib/libOpenCL.so
 vendor/lib/libRSDriver_adreno.so
+vendor/lib/libSHIMDivxDrm.so
 vendor/lib/libadreno_utils.so
 vendor/lib/libbccQTI.so
 vendor/lib/libc2d30-a3xx.so
@@ -216,6 +218,7 @@ vendor/lib/libizat_core.so
 vendor/lib/liblbs_core.so
 vendor/lib/libllvm-qcom.so
 vendor/lib/liblocationservice.so
+vendor/lib/libmmosal.so
 vendor/lib/libqmi_cci.so
 vendor/lib/libqmi_common_so.so
 vendor/lib/libqmi_csi.so
@@ -228,6 +231,7 @@ vendor/lib/librs_adreno_sha1.so
 vendor/lib/libsc-a3xx.so
 -vendor/lib/libtime_genoff.so
 vendor/lib/libulp2.so
+vendor/lib/libwfdcommonutils.so
 vendor/lib/libwvdrm_L1.so
 vendor/lib/libwvm.so
 vendor/lib/libWVStreamControlAPI_L1.so
