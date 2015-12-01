@@ -216,7 +216,8 @@ PRODUCT_PACKAGES += \
     camera.msm8960 \
     camera.qcom \
     libmmcamera_interface \
-    libmmcamera_interface2
+    libmmcamera_interface2 \
+    libsony_cam
 
 # Healthd
 PRODUCT_PACKAGES += \

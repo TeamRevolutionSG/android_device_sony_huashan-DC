@@ -35,3 +35,18 @@ extern "C" void _ZN7android16SortedVectorImpl25reservedSortedVectorImpl5Ev() { }
 extern "C" void _ZN7android16SortedVectorImpl25reservedSortedVectorImpl6Ev() { }
 extern "C" void _ZN7android16SortedVectorImpl25reservedSortedVectorImpl7Ev() { }
 extern "C" void _ZN7android16SortedVectorImpl25reservedSortedVectorImpl8Ev() { }
+
+extern "C" int _ZN7android6Parcel13writeString16EPKDsj();
+extern "C" int _ZN7android6Parcel13writeString16EPKtj() {
+    return _ZN7android6Parcel13writeString16EPKDsj();
+}
+
+extern "C" void _ZN7android19GraphicBufferMapper4lockEPK13native_handleiRKNS_4RectEPPv();
+extern "C" void _ZN7android19GraphicBufferMapper4lockEPK13native_handleiRKNS_4RectEPPv() { }
+
+//#include <utypes.h>
+
+//U_CAPI UText * U_EXPORT2
+//utext_openUChars_50(UText *ut, const UChar *s, int64_t length, UErrorCode *status) {
+//   return utext_openUChars(ut, s, length, status);
+//}

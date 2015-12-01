@@ -24,6 +24,7 @@ on early-init
 
 on init
     export LD_PRELOAD "libsony.so"
+    export LD_SHIM_LIBS /system/lib/hw/camera.vendor.qcom.so|libsony_cam.so
 
     symlink /dev/socket /tmp
 
