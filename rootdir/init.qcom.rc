@@ -23,8 +23,7 @@ on early-init
     symlink /data/tombstones /tombstones
 
 on init
-    export LD_PRELOAD "libsony.so"
-    export LD_SHIM_LIBS /system/lib/hw/camera.vendor.qcom.so|libsony_cam.so
+    export LD_SHIM_LIBS "/system/lib/hw/camera.vendor.qcom.so|/system/lib/libsony.so:/system/lib/hw/camera.vendor.qcom.so|/system/lib/libcamera_shim.so"
 
     symlink /dev/socket /tmp
 

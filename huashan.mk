@@ -217,7 +217,8 @@ PRODUCT_PACKAGES += \
     camera.qcom \
     libmmcamera_interface \
     libmmcamera_interface2 \
-    libsony_cam
+    libcamera_shim \
+    libsony
 
 # Healthd
 PRODUCT_PACKAGES += \
