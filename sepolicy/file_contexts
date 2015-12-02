@@ -6,7 +6,6 @@
 # Camera
 /dev/gemini.*                                                                     u:object_r:camera_device:s0
 /data/etc/flashled_vf_factory                                                     u:object_r:camera_data_file:s0
-/system/lib/libcald_imageutil.so                                                  u:object_r:camera_libs_file:s0
 
 # Glove Mode
 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity     u:object_r:sysfs_glove_mode:s0
@@ -14,6 +13,11 @@
 # Gpu
 /dev/kgsl-2d0                                                                     u:object_r:gpu_device:s0
 /dev/kgsl-2d1                                                                     u:object_r:gpu_device:s0
+
+# Libraries
+/system/lib/libcald_imageutil.so                                                  u:object_r:system_lib_camera_file:s0
+/system/lib/libface.so                                                            u:object_r:system_lib_media_file:s0
+/system/lib/libmmjpeg.so                                                          u:object_r:system_lib_media_file:s0
 
 # MPDecision
 /data/system/default_values                                                       u:object_r:mpctl_data_file:s0
