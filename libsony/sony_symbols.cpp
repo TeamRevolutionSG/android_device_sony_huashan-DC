@@ -17,7 +17,7 @@
 #include <cstddef>
 
 /* void VectorImpl::reservedVectorImpl */
-extern "C" void _ZN7android10VectorImpl19reservedVectorImpl1Ev() { }
+extern "C" void death_ZN7android10VectorImpl19reservedVectorImpl1Ev() { }
 extern "C" void _ZN7android10VectorImpl19reservedVectorImpl2Ev() { }
 extern "C" void _ZN7android10VectorImpl19reservedVectorImpl3Ev() { }
 extern "C" void _ZN7android10VectorImpl19reservedVectorImpl4Ev() { }
