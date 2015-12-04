@@ -171,7 +171,7 @@
 # AS3677 Light Sensor
 /sys/devices/i2c-10/10-0040            adc_als_value         0664 system system
 /sys/devices/i2c-10/10-0040            als_lx                0664 system camera
-/sys/devices/i2c-10/10-0040            als_on                0664 system camera
+/sys/devices/i2c-10/10-0040            als_on                0666 system camera
 /sys/devices/i2c-10/10-0040            als_group1            0666 system system
 /sys/devices/i2c-10/10-0040            als_fsm               0666 system system
 /sys/devices/i2c-10/10-0040            als_use_fsm           0666 system system
