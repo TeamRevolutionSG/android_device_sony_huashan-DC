@@ -21,4 +21,6 @@
 #define BTA_DISABLE_DELAY 1000 /* in milliseconds */
 #define SC_MODE_INCLUDED FALSE
 
+#define SC_MODE_INCLUDED FALSE
+
 #endif

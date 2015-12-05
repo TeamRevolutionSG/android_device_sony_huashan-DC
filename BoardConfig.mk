@@ -25,7 +25,7 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
 
 # Kernel properties
-TARGET_KERNEL_SOURCE := kernel/sony/msm8x60
+TARGET_KERNEL_SOURCE := kernel/sony/msm8960t
 TARGET_KERNEL_CONFIG := cm_viskan_huashan_defconfig
 
 # Platform
@@ -41,9 +41,6 @@ BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
-
-# Time
-BOARD_USES_QC_TIME_SERVICES := true
 
 # Dumpstate
 BOARD_LIB_DUMPSTATE := libdumpstate.sony
@@ -109,15 +106,12 @@ CM_POWERHAL_EXTENSION := qcom
 
 # Healthd
 BOARD_CHARGER_ENABLE_SUSPEND := true
-BOARD_CHARGER_SHOW_PERCENTAGE := true
-BACKLIGHT_PATH := /sys/devices/i2c-10/10-0040/leds/lcd-backlight1/brightness
-SECONDARY_BACKLIGHT_PATH := /sys/devices/i2c-10/10-0040/leds/lcd-backlight2/brightness
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
+BOARD_HAL_STATIC_LIBRARIES := libhealthd.huashan
+BOARD_HEALTHD_CUSTOM_CHARGER_RES := device/sony/huashan/charger/images
 RED_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_R/brightness
 GREEN_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_G/brightness
 BLUE_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_B/brightness
-
-# Needed for blobs
-TARGET_RELEASE_CPPFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
 
 # Vold
 TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/file
@@ -149,6 +143,8 @@ OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 HAVE_ADRENO_SOURCE := false
 
 # Audio
+AUDIO_FEATURE_ENABLED_INCALL_MUSIC := false
+AUDIO_FEATURE_ENABLED_COMPRESS_VOIP := false
 BOARD_USES_ALSA_AUDIO := true
 #BOARD_USES_LEGACY_ALSA_AUDIO := true
 TARGET_USES_QCOM_COMPRESSED_AUDIO := true
@@ -157,6 +153,10 @@ BOARD_HAVE_CSD_FAST_CALL_SWITCH := true
 BOARD_USES_FLUENCE_INCALL := true
 BOARD_USES_SEPERATED_AUDIO_INPUT := true
 BOARD_USES_SEPERATED_VOICE_SPEAKER_MIC := true
+QCOM_CSDCLIENT_ENABLED := false
+QCOM_PROXY_DEVICE_ENABLED := true
+QCOM_USBAUDIO_ENABLED := true
+AUDIO_FEATURE_DEEP_BUFFER_RINGTONE := true
 
 # FM Radio
 #QCOM_FM_ENABLED := true

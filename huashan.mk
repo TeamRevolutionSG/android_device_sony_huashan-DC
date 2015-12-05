@@ -49,7 +49,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/init.qcom.fm.sh:system/etc/init.qcom.fm.sh \
     $(LOCAL_PATH)/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
-# Additional sbin stuff
+# Trim Area daemon
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/sbin/wait4tad_static:root/sbin/wait4tad_static \
     $(LOCAL_PATH)/rootdir/sbin/tad_static:root/sbin/tad_static
@@ -75,8 +75,8 @@ PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     $(LOCAL_PATH)/rootdir/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
-    $(LOCAL_PATH)/rootdir/system/etc/media_codecs_performance.xml:system/etc/media_codecs_performance.xml \
-    $(LOCAL_PATH)/rootdir/system/etc/media_profiles.xml:system/etc/media_profiles.xml
+    $(LOCAL_PATH)/rootdir/system/etc/media_profiles.xml:system/etc/media_profiles.xml \
+    $(LOCAL_PATH)/rootdir/system/etc/media_codecs_performance.xml:system/etc/media_codecs_performance.xml
 
 # GPS
 PRODUCT_COPY_FILES += \
@@ -115,6 +115,14 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf
 
+# SONY TrimArea library
+PRODUCT_PACKAGES += \
+    libta
+
+# WiFi and Bluetooth MAC addresses
+PRODUCT_PACKAGES += \
+    macaddrsetup
+
 # NFC Support
 PRODUCT_PACKAGES += \
     libnfc \
@@ -127,10 +135,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     extract_elf_ramdisk
 
-# Compatibility symbols wrappers
+# Sony symbols
 PRODUCT_PACKAGES += \
-    libboringssl-compat \
-    libcompat_symbols
+    libsony
 
 # Build libstlport for legacy blobs
 PRODUCT_PACKAGES += \
@@ -162,10 +169,10 @@ PRODUCT_PACKAGES += \
     libOmxVdec \
     libOmxVenc \
     libc2dcolorconvert \
+    libdashplayer \
     libdivxdrmdecrypt \
     libmm-omxcore \
     libstagefrighthw
-#    libdashplayer
 
 # Display
 PRODUCT_PACKAGES += \
@@ -194,10 +201,10 @@ PRODUCT_PACKAGES += \
 
 # FM radio
 #PRODUCT_PACKAGES += \
-    #FM2 \
-    #FMRecord \
-    #libqcomfm_jni \
-    #qcom.fmradio
+#    FM2 \
+#    FMRecord \
+#    libqcomfm_jni \
+#    qcom.fmradio
 
 # Bluetooth
 PRODUCT_PACKAGES += \
@@ -209,11 +216,17 @@ PRODUCT_PACKAGES += \
     camera.msm8960 \
     camera.qcom \
     libmmcamera_interface \
-    libmmcamera_interface2
+    libmmcamera_interface2 \
+    libcamera_shim \
+    libsony
 
 # Healthd
 PRODUCT_PACKAGES += \
     charger_res_images
+
+# Allows healthd to boot directly from charger mode rather than initiating a reboot.
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.enable_boot_charger_mode=1
 
 # Force use old camera api
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -223,9 +236,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     sensors.msm8960
 
+# Time for RIL
+PRODUCT_PACKAGES += \
+    libtime_genoff
+
 # Wifi service
 PRODUCT_PACKAGES += \
-    mac-update \
     wcnss_service
 
 PRODUCT_PACKAGES += \
@@ -236,11 +252,6 @@ PRODUCT_PACKAGES += \
     dhcpcd.conf \
     wpa_supplicant \
     wpa_supplicant.conf
-
-# Misc
-PRODUCT_PACKAGES += \
-    librs_jni \
-    com.android.future.usb.accessory
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -254,18 +265,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     thermanager
 
-# Low-RAM optimizations
-ADDITIONAL_BUILD_PROPERTIES += \
-    ro.config.low_ram=true \
-    persist.sys.force_highendgfx=true \
-    dalvik.vm.jit.codecachesize=0 \
-    config.disable_atlas=true \
-    ro.config.max_starting_bg=8 \
-    ro.sys.fw.bg_apps_limit=16
-
-# Set default USB interface
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
+# ART
+PRODUCT_PROPERTY_OVERRIDES += \
+    dalvik.vm.dex2oat-flags=--no-watch-dog \
+    dalvik.vm.dex2oat-swap=false \
+    ro.sys.fw.dex2oat_thread_count=3
 
 # Radio and Telephony
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -273,10 +277,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.add_power_save=1 \
     ro.telephony.ril_class=SonyRIL \
     rild.libpath=/system/lib/libril-qc-qmi-1.so
-
-# Perfd
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.extension_library=libqti-perfd-client.so
 
 # Display
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -288,23 +288,21 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
 
+# Glove mode
+PRODUCT_PACKAGES += \
+    DeviceSettings
+
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.audio.fluence.mode=endfire \
     persist.audio.handset.mic=digital \
     persist.audio.lowlatency.rec=false \
     af.resampler.quality=255 \
-    ro.qc.sdk.audio.fluencetype=fluence \
-    ro.config.vc_call_vol_steps=6
-
-# ART
-PRODUCT_PROPERTY_OVERRIDES += \
-    dalvik.vm.dex2oat-flags=--no-watch-dog \
-    dalvik.vm.dex2oat-swap=false \
-    ro.sys.fw.dex2oat_thread_count=3
+    ro.qc.sdk.audio.fluencetype=fluence
 
 # QCOM
 PRODUCT_PROPERTY_OVERRIDES += \
+    persist.data.qmi.adb_logmask=0 \
     com.qc.hardware=true
 
 # QCOM Location
@@ -317,6 +315,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.bt.hci_transport=smd \
+    ro.bt.bdaddr_path=/data/misc/bluetooth_bdaddr \
     qcom.bt.le_dev_pwr_class=1
 
 # WiFi

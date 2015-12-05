@@ -43,7 +43,6 @@
 #endif
 
 /* === Module Constants === */
-#define LEDS_WITNESS_MODE 1
 #define LIGHT_BRIGHTNESS_MAXIMUM 0xFF
 #define MAX_PATH_SIZE 80
 enum leds_state { LEDS_OFF, LEDS_NOTIFICATIONS, LEDS_BATTERY };
@@ -163,6 +162,7 @@ set_light_lcd_backlight(struct light_device_t* dev,
         struct light_state_t const* state) {
 
     int err = 0;
+    unsigned int brightness1, brightness2;
     unsigned int brightness = rgb_to_brightness(state);
     if (!dev) {
         return -1;
@@ -179,10 +179,29 @@ set_light_lcd_backlight(struct light_device_t* dev,
         brightness = LCD_BRIGHTNESS_MAX;
     }
 
+    /* LCD backlight incremental override */
+    if (brightness != LCD_BRIGHTNESS_OFF) {
+        if (brightness < LCD_BACKLIGHT_SLOWED_SPAN)  {
+            brightness1 = (brightness + 1) / 2;
+            brightness2 = brightness / 2;
+        }
+        else {
+            brightness1 = LCD_BACKLIGHT_SLOWED_MAX +
+                    ((brightness - LCD_BACKLIGHT_SLOWED_SPAN)
+                    * LCD_BACKLIGHT_ACCELERATED_REAL)
+                    / LCD_BACKLIGHT_ACCELERATED_SPAN;
+            brightness2 = brightness1;
+        }
+    }
+    else {
+        brightness1 = LCD_BRIGHTNESS_OFF;
+        brightness2 = LCD_BRIGHTNESS_OFF;
+    }
+
     /* LCD brightness update */
     pthread_mutex_lock(&g_lock);
-    err |= write_int(LCD_BACKLIGHT1_FILE, brightness);
-    err |= write_int(LCD_BACKLIGHT2_FILE, brightness);
+    err |= write_int(LCD_BACKLIGHT1_FILE, brightness1);
+    err |= write_int(LCD_BACKLIGHT2_FILE, brightness2);
     pthread_mutex_unlock(&g_lock);
     return err;
 }
@@ -335,6 +354,7 @@ set_light_leds_locked(struct light_device_t* dev,
 
     int i, c;
     int flashMode;
+    int leds_modes;
     int leds_rgb_update;
     int leds_unit_minid;
     int leds_unit_maxid;
@@ -347,6 +367,7 @@ set_light_leds_locked(struct light_device_t* dev,
 
     /* LEDs variables processing */
     leds_brightness = (state->color & 0xFF000000) >> 24;
+    leds_modes = state->ledsModes;
     leds_unit_minid = 1;
     leds_unit_maxid = LEDS_UNIT_COUNT;
     delayOn = state->flashOnMS;
@@ -364,8 +385,8 @@ set_light_leds_locked(struct light_device_t* dev,
         flashMode = LIGHT_FLASH_NONE;
     }
 
-    /* Allow the witness mode, replaced in future commit with Multiple LEDs */
-    if (LEDS_WITNESS_MODE) {
+    /* Use multiple LEDs */
+    if (leds_modes & LIGHT_MODE_MULTIPLE_LEDS) {
 
         /* LEDs charging witness mode */
         if (is_lit(&g_battery)) {
@@ -402,6 +423,18 @@ set_light_leds_locked(struct light_device_t* dev,
                 g_leds_state = current_leds_state;
             }
         }
+    }
+    /* Use single LED */
+    else {
+        unsigned int led_rgb_off[3] = {0,0,0};
+        leds_unit_minid = 1;
+        leds_unit_maxid = 1;
+        for (i = 2; i <= LEDS_UNIT_COUNT; ++i) {
+            set_light_led_rgb(i, led_rgb_off, leds_brightness,
+                    LEDS_RGB_WRITE);
+        }
+        set_light_leds_program(LEDS_PROGRAM_KEEP, LEDS_SEQ_BLINK_NONE,
+                flashMode, 0, 0);
     }
 
     /* Detection of the delays update */
@@ -466,7 +499,7 @@ set_light_leds_locked(struct light_device_t* dev,
             "Update : %d/%d - Brightness : %d - LEDs Mode : %d - "
             "Mode : %d (Not. 1 / Bat. 2)\n",
             led_rgb[0], led_rgb[1], led_rgb[2], delayOn, delayOff, flashMode,
-            leds_rgb_update, leds_program_update, leds_brightness, 1,
+            leds_rgb_update, leds_program_update, leds_brightness, leds_modes,
             g_leds_state);
     (void)dev;
     return 0;

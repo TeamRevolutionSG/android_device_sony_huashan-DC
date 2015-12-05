@@ -1,10 +1,31 @@
-# Grant access to Qualcomm MSM Interface (QMI) audio sockets to mediaserver
-unix_socket_send(mediaserver, camera, camera)
-unix_socket_send(mediaserver, mpdecision, mpdecision)
+# camera.0.name
+allow mediaserver camera_prop:property_service set;
+allow mediaserver camera_device:dir search;
+allow mediaserver camera_socket:file { getattr open read write };
+allow mediaserver camera_data_file:file rw_file_perms;
 
-# Permit mediaserver to create sockets with no specific SELinux class.
-# TODO: Investigate the specific type of socket.
+# /dev/msm_camera
+allow mediaserver camera_device:dir { search };
+r_dir_file(mediaserver, camera_data_file)
+
+r_dir_file(mediaserver, media_rw_data_file)
+
+# /dev/input
+allow mediaserver input_device:dir { search };
+
+allow mediaserver ctl_default_prop:property_service set;
 allow mediaserver self:socket create_socket_perms;
 
-# For text relocations in /system/vendor/lib/libmmjpeg.so
-allow mediaserver system_file:file execmod;
+allow mediaserver shell_data_file:dir search;
+
+allow mediaserver system_file:file { execmod };
+allow mediaserver mnt_user_file:lnk_file { read };
+allow mediaserver mnt_user_file:dir { search };
+allow mediaserver storage_file:lnk_file { read };
+allow mediaserver storage_file:dir { search };
+
+# For camera libraries
+allow mediaserver system_lib_camera_file:file { execmod getattr open read };
+allow mediaserver system_lib_media_file:file { execmod getattr open read };
+
+#execute neverallowed

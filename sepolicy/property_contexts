@@ -1,2 +1,4 @@
-ctl.rmt        u:object_r:ctl_rmt_prop:s0
-ctl.rmt_storage        u:object_r:ctl_rmt_prop:s0
+ctl.quipc_igsn                u:object_r:ctl_quipc_prop:s0
+camera.0.name                 u:object_r:camera_prop:s0
+camera.1.name                 u:object_r:camera_prop:s0
+user.language                 u:object_r:system_prop:s0
