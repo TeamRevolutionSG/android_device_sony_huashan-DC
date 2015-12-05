@@ -40,6 +40,3 @@ extern "C" int _ZN7android6Parcel13writeString16EPKDsj();
 extern "C" int _ZN7android6Parcel13writeString16EPKtj() {
     return _ZN7android6Parcel13writeString16EPKDsj();
 }
-
-//extern "C" void _ZN7android19GraphicBufferMapper4lockEPK13native_handleiRKNS_4RectEPPv();
-//extern "C" void _ZN7android19GraphicBufferMapper4lockEPK13native_handleiRKNS_4RectEPPv() { }
