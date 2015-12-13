@@ -1,6 +1,5 @@
-# Camera / Media
-type system_lib_camera_file, fs_type, sysfs_type;
-type system_lib_media_file, fs_type, sysfs_type;
+# Camera and Media shim Libraries
+type system_libs_shim_file, fs_type, sysfs_type;
 
 # Default type for anything under /firmware
 type radio_efs_file, fs_type;
