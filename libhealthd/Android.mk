@@ -4,7 +4,7 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-LOCAL_SRC_FILES := healthd_board_huashan.cpp
+LOCAL_SRC_FILES := healthd_board_huashan.cpp healthd_msm_alarm.cpp
 LOCAL_MODULE := libhealthd.huashan
 LOCAL_C_INCLUDES := system/core/healthd
 LOCAL_CFLAGS := -Werror

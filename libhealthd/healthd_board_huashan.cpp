@@ -19,6 +19,7 @@
 #include <fcntl.h>
 
 #include <healthd.h>
+#include "healthd_msm.h"
 
 #define BACKLIGHT_ON_LEVEL        100
 #define BACKLIGHT_PATH            "/sys/devices/i2c-10/10-0040/leds/lcd-backlight1/brightness"
@@ -31,6 +32,7 @@
 void healthd_board_init(struct healthd_config*)
 {
     // use defaults
+    power_off_alarm_init();
 }
 
 
