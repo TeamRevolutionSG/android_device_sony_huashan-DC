@@ -71,7 +71,6 @@ BOARD_HARDWARE_CLASS := device/sony/huashan/cmhw
 BOARD_USES_QCOM_HARDWARE := true
 
 # Camera
-TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 
 # GPS
