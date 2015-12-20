@@ -19,15 +19,3 @@ LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_SHARED_LIBRARY)
 endif
-
-include $(CLEAR_VARS)
-
-LOCAL_SHARED_LIBRARIES := liblog libcutils libgui libutils
-
-LOCAL_SRC_FILES := \
-    sony_camera.c
-
-LOCAL_MODULE := libsony_cam
-LOCAL_MODULE_CLASS := SHARED_LIBRARIES
-
-include $(BUILD_SHARED_LIBRARY)
