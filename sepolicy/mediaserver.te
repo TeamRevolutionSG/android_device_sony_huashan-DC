@@ -24,4 +24,4 @@ allow mediaserver storage_file:lnk_file { read };
 allow mediaserver storage_file:dir { search };
 
 # For camera libraries
-allow mediaserver system_libs_shim_file:file { execmod getattr open read };
+allow mediaserver system_file:file { execmod };

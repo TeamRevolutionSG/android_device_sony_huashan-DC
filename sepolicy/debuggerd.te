@@ -1,2 +1,1 @@
 allow debuggerd gpu_device:chr_file { getattr open read };
-allow debuggerd system_libs_shim_file:file { getattr open read };
