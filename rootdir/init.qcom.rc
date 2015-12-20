@@ -26,8 +26,6 @@ on init
     # Preload the BoringSSL wrapper
     export LD_PRELOAD "libboringssl-compat.so"
 
-    export LD_SHIM_LIBS "/system/lib/hw/camera.vendor.qcom.so|/system/lib/libsony.so:/system/lib/hw/camera.vendor.qcom.so|/system/lib/libcamera_shim.so:/system/lib/libmmcamera_wavelet_lib.so|/system/lib/libadsprpc.so:/system/lib/libcald_pal.so|/system/lib/libcamera_shim.so"
-
     symlink /dev/socket /tmp
 
     mkdir /dev/bus 0755 root root
