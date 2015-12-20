@@ -21,7 +21,8 @@
 *
 */
 
-//#define LOG_NDEBUG 0
+#define LOG_NDEBUG 0
+#define LOG_PARAMETERS
 
 #define LOG_TAG "CameraWrapper"
 #include <cutils/log.h>
@@ -113,6 +114,8 @@ static int check_vendor_module()
             (const hw_module_t**)&gVendorModule);
     if (rv)
         ALOGE("failed to open vendor camera module");
+
+    ALOGV("success opening vendor camera module");
     return rv;
 }
 
@@ -138,7 +141,7 @@ static char *camera_fixup_getparams(int id, const char *settings)
     params.unflatten(android::String8(settings));
 
 #if !LOG_NDEBUG
-    ALOGV("%s: original parameters:", __FUNCTION__);
+    ALOGV("%s: Original parameters:", __FUNCTION__);
     params.dump();
 #endif
 
@@ -209,7 +212,7 @@ static char *camera_fixup_getparams(int id, const char *settings)
     }
 
 #if !LOG_NDEBUG
-    ALOGV("%s: fixed parameters:", __FUNCTION__);
+    ALOGV("%s: Fixed parameters:", __FUNCTION__);
     params.dump();
 #endif
 
@@ -266,6 +269,7 @@ static char *camera_fixup_setparams(int id, const char *settings)
         }
     }
 
+    /* HDR */
     if (params.get(android::CameraParameters::KEY_SCENE_MODE)) {
         const char *sceneMode = params.get(android::CameraParameters::KEY_SCENE_MODE);
         if (strcmp(sceneMode, "hdr") == 0) {

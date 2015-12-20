@@ -55,7 +55,7 @@ ssize_t SensorEventQueue::write(ASensorEvent const* events, size_t numEvents)
     }
     return size;
 }
-ssize_t SensorEventQueue::read(ASensorEvent* events, size_t numEvents)
+ssize_t SensorEventQueue::read(ASensorEvent* events, unsigned int numEvents)
 {
     ssize_t size = mSensorChannel->read(events, numEvents*sizeof(events[0]));
     ALOGE_IF(size<0 && size!=-EAGAIN,

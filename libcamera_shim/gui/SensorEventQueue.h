@@ -43,7 +43,7 @@ public:
     virtual void onFirstRef();
     int getFd() const;
     ssize_t write(ASensorEvent const* events, size_t numEvents);
-    ssize_t read(ASensorEvent* events, size_t numEvents);
+    ssize_t read(ASensorEvent* events, unsigned int numEvents);
     status_t waitForEvent() const;
     status_t wake() const;
     status_t enableSensor(Sensor const* sensor) const;
