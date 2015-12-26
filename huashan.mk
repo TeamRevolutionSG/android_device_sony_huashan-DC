@@ -206,6 +206,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Snap \
     camera.qcom \
+    libshim_camera \
     libshim_qcopt
 
 # Healthd
