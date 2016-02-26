@@ -254,10 +254,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     thermanager
 
-# Glove mode
-PRODUCT_PACKAGES += \
-    DeviceSettings
-
 # Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp
@@ -286,6 +282,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # DRM
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
+
+# Glove mode
+PRODUCT_PACKAGES += \
+    DeviceSettings
 
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \

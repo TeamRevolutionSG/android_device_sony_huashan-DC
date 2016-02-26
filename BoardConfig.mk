@@ -15,6 +15,7 @@
 # Inherit from Sony common
 include device/sony/common/BoardConfigCommon.mk
 
+# Device Headers
 TARGET_SPECIFIC_HEADER_PATH += device/sony/huashan/include
 
 # Architecture
