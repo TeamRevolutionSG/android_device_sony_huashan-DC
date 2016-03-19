@@ -30,12 +30,10 @@ public class BootCompletedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, Intent intent) {
-        if (intent.getAction().equals(Intent.ACTION_PRE_BOOT_COMPLETED)) {
-            if (DEBUG) Log.d(TAG, "Starting service");
-            enableComponent(context, TouchscreenGestureSettings.class.getName());
-            context.startService(new Intent(context, SensorsDozeService.class));
-            context.startService(new Intent(context, GloveModeService.class));
-        }
+        if (DEBUG) Log.d(TAG, "Starting service");
+        enableComponent(context, TouchscreenGestureSettings.class.getName());
+        context.startService(new Intent(context, SensorsDozeService.class));
+        context.startService(new Intent(context, GloveModeService.class));
     }
 
     private void enableComponent(Context context, String component) {
