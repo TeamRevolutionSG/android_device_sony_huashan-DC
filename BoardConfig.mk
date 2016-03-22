@@ -15,6 +15,7 @@
 # Inherit from Sony common
 include device/sony/common/BoardConfigCommon.mk
 
+# Device Headers
 TARGET_SPECIFIC_HEADER_PATH += device/sony/huashan/include
 
 # Architecture
@@ -41,9 +42,6 @@ BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000
 
 TARGET_NO_BOOTLOADER := true
 TARGET_NO_RADIOIMAGE := true
-
-# Time
-BOARD_USES_QC_TIME_SERVICES := true
 
 # Dumpstate
 BOARD_LIB_DUMPSTATE := libdumpstate.sony
@@ -98,6 +96,15 @@ BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/sony/huashan/bluetooth
 
+# DEV-ONLY: Pre-optimize the boot image
+# Enable dex-preoptimization to speed up first boot sequence
+ifeq ($(HOST_OS),linux)
+  ifeq ($(WITH_DEXPREOPT),)
+    WITH_DEXPREOPT := true
+    WITH_DEXPREOPT_BOOT_IMG_ONLY := false
+  endif
+endif
+
 # Power HAL
 TARGET_POWERHAL_VARIANT := qcom
 CM_POWERHAL_EXTENSION := qcom
@@ -108,7 +115,8 @@ BOARD_RIL_CLASS := ../../../device/sony/huashan/ril/
 
 # Healthd
 BOARD_CHARGER_ENABLE_SUSPEND := true
-BOARD_CHARGER_SHOW_PERCENTAGE := true
+BOARD_CHARGER_DISABLE_INIT_BLANK := true
+BOARD_HEALTHD_CUSTOM_CHARGER_RES := device/sony/huashan/charger/images
 BACKLIGHT_PATH := /sys/devices/i2c-10/10-0040/leds/lcd-backlight1/brightness
 SECONDARY_BACKLIGHT_PATH := /sys/devices/i2c-10/10-0040/leds/lcd-backlight2/brightness
 RED_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_R/brightness
@@ -184,7 +192,7 @@ BOARD_SEPOLICY_UNION += \
     init.te \
     init_shell.te \
     kernel.te \
-    mac_update.te \
+    macaddrsetup.te \
     mediaserver.te \
     mpdecision.te \
     netd.te \
@@ -196,12 +204,11 @@ BOARD_SEPOLICY_UNION += \
     sdcardd.te \
     secchand.te \
     settings_device.te \
-    setup_fs.te \
     shell.te \
     surfaceflinger.te \
     system_app.te \
     system_server.te \
-    tad_static.te \
+    tad.te \
     ta_qmi_service.te \
     thermanager.te \
     updatemiscta.te \

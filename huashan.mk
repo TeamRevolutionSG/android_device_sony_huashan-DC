@@ -48,7 +48,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/init.qcom.fm.sh:system/etc/init.qcom.fm.sh \
     $(LOCAL_PATH)/rootdir/ueventd.qcom.rc:root/ueventd.qcom.rc
 
-# Additional sbin stuff
+# Trim Area daemon
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/sbin/wait4tad_static:root/sbin/wait4tad_static \
     $(LOCAL_PATH)/rootdir/sbin/tad_static:root/sbin/tad_static
@@ -112,6 +112,14 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf
+
+# SONY TrimArea library
+PRODUCT_PACKAGES += \
+    libta
+
+# WiFi and Bluetooth MAC addresses
+PRODUCT_PACKAGES += \
+    macaddrsetup
 
 # NFC Support
 PRODUCT_PACKAGES += \
@@ -194,16 +202,15 @@ PRODUCT_PACKAGES += \
 
 # Camera
 PRODUCT_PACKAGES += \
-    camera.sony \
-    camera.msm8960 \
-    camera.qcom \
-    libmmcamera_interface \
-    libmmcamera_interface2 \
-    CameraNext
+    camera.qcom
 
 # Healthd
 PRODUCT_PACKAGES += \
     charger_res_images
+
+# Allows healthd to boot directly from charger mode rather than initiating a reboot.
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.enable_boot_charger_mode=1
 
 # Force use old camera api
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -213,9 +220,12 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     sensors.msm8960
 
+# Time for RIL
+PRODUCT_PACKAGES += \
+    libtime_genoff
+
 # Wifi service
 PRODUCT_PACKAGES += \
-    mac-update \
     wcnss_service
 
 PRODUCT_PACKAGES += \
@@ -243,19 +253,6 @@ PRODUCT_PACKAGES += \
 # Thermal management
 PRODUCT_PACKAGES += \
     thermanager
-
-# Glove mode
-PRODUCT_PACKAGES += \
-    DeviceSettings
-
-# Low-RAM optimizations
-ADDITIONAL_BUILD_PROPERTIES += \
-    ro.config.low_ram=true \
-    persist.sys.force_highendgfx=true \
-    dalvik.vm.jit.codecachesize=0 \
-    config.disable_atlas=true \
-    ro.config.max_starting_bg=8 \
-    ro.sys.fw.bg_apps_limit=16
 
 # Set default USB interface
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -286,6 +283,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     drm.service.enabled=true
 
+# Glove mode
+PRODUCT_PACKAGES += \
+    DeviceSettings
+
 # Audio
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.audio.fluence.mode=endfire \
@@ -308,6 +309,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Bluetooth
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.qualcomm.bt.hci_transport=smd \
+    ro.bt.bdaddr_path=/data/misc/bluetooth_bdaddr \
     qcom.bt.le_dev_pwr_class=1
 
 # WiFi
