@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "Sensors"
+#define LOG_TAG "SHIM_SensorManager"
 
 #include <stdint.h>
 #include <sys/types.h>
@@ -35,8 +35,6 @@
 // ----------------------------------------------------------------------------
 namespace android {
 // ----------------------------------------------------------------------------
-
-static String16 gPackageName = String16("packageName");
 
 ANDROID_SINGLETON_STATIC_INSTANCE(SensorManager)
 
@@ -63,23 +61,18 @@ void SensorManager::sensorManagerDied()
 
 status_t SensorManager::assertStateLocked() const {
     if (mSensorServer == NULL) {
-        // try for 300 seconds (60*5(getService() tries for 5 seconds)) before giving up ...
+        // try for one second
         const String16 name("sensorservice");
-        status_t err = NO_ERROR;
-
         for (int i=0 ; i<4 ; i++) {
-            if (i > 0) {
-                // Don't sleep on the first try or after the last failed try
+            status_t err = getService(name, &mSensorServer);
+            if (err == NAME_NOT_FOUND) {
                 usleep(250000);
+                continue;
             }
-            err = getService(name, &mSensorServer);
-            if (err != NAME_NOT_FOUND) {
-                break;
+            if (err != NO_ERROR) {
+                return err;
             }
-        }
-
-        if (err != NO_ERROR) {
-            return err;
+            break;
         }
 
         class DeathObserver : public IBinder::DeathRecipient {
@@ -92,17 +85,12 @@ status_t SensorManager::assertStateLocked() const {
             DeathObserver(SensorManager& mgr) : mSensorManger(mgr) { }
         };
 
-        LOG_ALWAYS_FATAL_IF(mSensorServer.get() == NULL, "getService(SensorService) NULL");
-
         mDeathObserver = new DeathObserver(*const_cast<SensorManager *>(this));
-        IInterface::asBinder(mSensorServer)->linkToDeath(mDeathObserver);
+        mSensorServer->asBinder()->linkToDeath(mDeathObserver);
 
-        mSensors = mSensorServer->getSensorList(gPackageName);
+        mSensors = mSensorServer->getSensorList();
         size_t count = mSensors.size();
-        mSensorList =
-                static_cast<Sensor const**>(malloc(count * sizeof(Sensor*)));
-        LOG_ALWAYS_FATAL_IF(mSensorList == NULL, "mSensorList NULL");
-
+        mSensorList = (Sensor const**)malloc(count * sizeof(Sensor*));
         for (size_t i=0 ; i<count ; i++) {
             mSensorList[i] = mSensors.array() + i;
         }
@@ -111,54 +99,46 @@ status_t SensorManager::assertStateLocked() const {
     return NO_ERROR;
 }
 
+
+
 ssize_t SensorManager::getSensorList(Sensor const* const** list) const
 {
     Mutex::Autolock _l(mLock);
     status_t err = assertStateLocked();
     if (err < 0) {
-        return static_cast<ssize_t>(err);
+        return ssize_t(err);
     }
     *list = mSensorList;
-    return static_cast<ssize_t>(mSensors.size());
+    return mSensors.size();
 }
 
 Sensor const* SensorManager::getDefaultSensor(int type)
 {
     Mutex::Autolock _l(mLock);
     if (assertStateLocked() == NO_ERROR) {
-        bool wakeUpSensor = false;
-        // For the following sensor types, return a wake-up sensor. These types are by default
-        // defined as wake-up sensors. For the rest of the sensor types defined in sensors.h return
-        // a non_wake-up version.
-        if (type == SENSOR_TYPE_PROXIMITY || type == SENSOR_TYPE_SIGNIFICANT_MOTION ||
-            type == SENSOR_TYPE_TILT_DETECTOR || type == SENSOR_TYPE_WAKE_GESTURE ||
-            type == SENSOR_TYPE_GLANCE_GESTURE || type == SENSOR_TYPE_PICK_UP_GESTURE) {
-            wakeUpSensor = true;
-        }
         // For now we just return the first sensor of that type we find.
         // in the future it will make sense to let the SensorService make
         // that decision.
         for (size_t i=0 ; i<mSensors.size() ; i++) {
-            if (mSensorList[i]->getType() == type &&
-                mSensorList[i]->isWakeUpSensor() == wakeUpSensor) {
+            if (mSensorList[i]->getType() == type)
                 return mSensorList[i];
-            }
         }
     }
     return NULL;
 }
 
-sp<SensorEventQueue> SensorManager::createEventQueue() {
+sp<SensorEventQueue> SensorManager::createEventQueue()
+{
     sp<SensorEventQueue> queue;
 
     Mutex::Autolock _l(mLock);
     while (assertStateLocked() == NO_ERROR) {
         sp<ISensorEventConnection> connection =
-                mSensorServer->createSensorEventConnection(String8(""), 0, gPackageName);
+                mSensorServer->createSensorEventConnection();
         if (connection == NULL) {
-            // SensorService just died or the app doesn't have required permissions.
-            ALOGE("createEventQueue: connection is NULL.");
-            return NULL;
+            // SensorService just died.
+            ALOGE("createEventQueue: connection is NULL. SensorService died.");
+            continue;
         }
         queue = new SensorEventQueue(connection);
         break;

@@ -1,4 +1,4 @@
-# Copyright (C) 2015-2016 The CyanogenMod Project
+# Copyright (C) 2015 The CyanogenMod Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,33 +14,55 @@
 
 LOCAL_PATH := $(call my-dir)
 
-# libshim_camera
+# libshim_huashan
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
+    binder/Binder.cpp \
+    binder/BpBinder.cpp \
+    binder/IInterface.cpp \
+    binder/IPCThreadState.cpp \
+    binder/IPermissionController.cpp \
+    binder/IServiceManager.cpp \
+    binder/Parcel.cpp \
+    binder/ProcessState.cpp \
+    binder/Static.cpp \
+    gui/BitTube.cpp \
+    gui/ISensorEventConnection.cpp \
+    gui/ISensorServer.cpp \
+    gui/Sensor.cpp \
+    gui/SensorEventQueue.cpp \
     gui/SensorManager.cpp \
-    ui/GraphicBuffer.cpp \
-    ui/GraphicBufferAllocator.cpp \
     ui/GraphicBufferMapper.cpp \
+    utils/BufferedTextOutput.cpp \
+    utils/Debug.cpp \
+    utils/Flattenable.cpp \
+    utils/Log.cpp \
     utils/Looper.cpp \
-    utils/VectorImpl.cpp \
-    symbols/Parcel.cpp
-
-LOCAL_C_INCLUDES := \
-    $(LOCAL_PATH)/include \
-    external/safe-iop/include
+    utils/Static.cpp \
+    utils/TextOutput.cpp \
+    utils/Threads.cpp \
+    Symbols.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-    liblog \
     libcutils \
     libhardware \
+    liblog \
     libui \
-    libgui \
-    libbinder \
-    libutils \
-    libsync
+    libutils
 
 LOCAL_MODULE := libshim_camera
+
+LOCAL_C_INCLUDES := \
+    $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include \
+    $(LOCAL_PATH)/include
+
+LOCAL_CFLAGS += \
+    -DBINDER_IPC_32BIT \
+    -DHAVE_PTHREADS
+
+LOCAL_ADDITIONAL_DEPENDENCIES := \
+    $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
@@ -56,9 +78,6 @@ LOCAL_SRC_FILES := \
 LOCAL_SHARED_LIBRARIES := \
     libicuuc \
     libicui18n
-
-LOCAL_CFLAGS += \
-    -Wall
 
 LOCAL_MODULE := libshim_qcopt
 

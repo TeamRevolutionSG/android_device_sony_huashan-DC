@@ -14,62 +14,72 @@
  * limitations under the License.
  */
 
-#ifndef ANDROID_GUI_SENSOR_MANAGER_H
-#define ANDROID_GUI_SENSOR_MANAGER_H
+#ifndef ANDROID_SENSOR_EVENT_QUEUE_H
+#define ANDROID_SENSOR_EVENT_QUEUE_H
 
 #include <stdint.h>
 #include <sys/types.h>
 
-#include <binder/IBinder.h>
-
 #include <utils/Errors.h>
 #include <utils/RefBase.h>
-#include <utils/Singleton.h>
-#include <utils/Vector.h>
+#include <utils/Timers.h>
 
-#include <gui/SensorEventQueue.h>
+#include <gui/BitTube.h>
 
 // ----------------------------------------------------------------------------
+
+struct ALooper;
+struct ASensorEvent;
+
 // Concrete types for the NDK
-struct ASensorManager { };
+struct ASensorEventQueue {
+    ALooper* looper;
+};
 
 // ----------------------------------------------------------------------------
 namespace android {
 // ----------------------------------------------------------------------------
 
-class ISensorServer;
+class ISensorEventConnection;
 class Sensor;
-class SensorEventQueue;
+class Looper;
 
 // ----------------------------------------------------------------------------
 
-class SensorManager :
-    public ASensorManager,
-    public Singleton<SensorManager>
+class SensorEventQueue : public ASensorEventQueue, public RefBase
 {
 public:
-    SensorManager();
-    ~SensorManager();
+            SensorEventQueue(const sp<ISensorEventConnection>& connection);
+    virtual ~SensorEventQueue();
+    virtual void onFirstRef();
 
-    ssize_t getSensorList(Sensor const* const** list) const;
-    Sensor const* getDefaultSensor(int type);
-    sp<SensorEventQueue> createEventQueue();
+    int getFd() const;
+
+    static ssize_t write(const sp<BitTube>& tube,
+            ASensorEvent const* events, size_t numEvents);
+
+    ssize_t read(ASensorEvent* events, size_t numEvents);
+
+    status_t waitForEvent() const;
+    status_t wake() const;
+
+    status_t enableSensor(Sensor const* sensor) const;
+    status_t disableSensor(Sensor const* sensor) const;
+    status_t setEventRate(Sensor const* sensor, nsecs_t ns) const;
+
+    // these are here only to support SensorManager.java
+    status_t enableSensor(int32_t handle, int32_t us) const;
+    status_t disableSensor(int32_t handle) const;
 
 private:
-    // DeathRecipient interface
-    void sensorManagerDied();
-
-    status_t assertStateLocked() const;
-
-private:
+    sp<Looper> getLooper() const;
+    sp<ISensorEventConnection> mSensorEventConnection;
+    sp<BitTube> mSensorChannel;
     mutable Mutex mLock;
-    mutable sp<ISensorServer> mSensorServer;
-    mutable Sensor const** mSensorList;
-    mutable Vector<Sensor> mSensors;
-    mutable sp<IBinder::DeathRecipient> mDeathObserver;
+    mutable sp<Looper> mLooper;
 };
 
 // ----------------------------------------------------------------------------
 }; // namespace android
 
-#endif // ANDROID_GUI_SENSOR_MANAGER_H
+#endif // ANDROID_SENSOR_EVENT_QUEUE_H

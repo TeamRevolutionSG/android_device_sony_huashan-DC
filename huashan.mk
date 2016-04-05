@@ -194,8 +194,9 @@ PRODUCT_PACKAGES += \
 
 # FM radio
 PRODUCT_PACKAGES += \
-    FMRadio \
-    libfmjni
+    FM2 \
+    libqcomfm_jni \
+    qcom.fmradio
 
 # Bluetooth
 PRODUCT_PACKAGES += \

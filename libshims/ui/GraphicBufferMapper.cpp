@@ -14,106 +14,54 @@
  * limitations under the License.
  */
 
-#define LOG_TAG "GraphicBufferMapper"
-#define ATRACE_TAG ATRACE_TAG_GRAPHICS
+#ifndef ANDROID_UI_BUFFER_MAPPER_H
+#define ANDROID_UI_BUFFER_MAPPER_H
 
 #include <stdint.h>
-#include <errno.h>
+#include <sys/types.h>
 
-#include <sync/sync.h>
-
-#include <utils/Errors.h>
-#include <utils/Log.h>
-#include <utils/Trace.h>
-
-#include <ui/GraphicBufferMapper.h>
-#include <ui/Rect.h>
+#include <utils/Singleton.h>
 
 #include <hardware/gralloc.h>
 
 
+struct gralloc_module_t;
+
 namespace android {
-// ---------------------------------------------------------------------------
-
-ANDROID_SINGLETON_STATIC_INSTANCE( GraphicBufferMapper )
-
-GraphicBufferMapper::GraphicBufferMapper()
-    : mAllocMod(0)
-{
-    hw_module_t const* module;
-    int err = hw_get_module(GRALLOC_HARDWARE_MODULE_ID, &module);
-    ALOGE_IF(err, "FATAL: can't find the %s module", GRALLOC_HARDWARE_MODULE_ID);
-    if (err == 0) {
-        mAllocMod = reinterpret_cast<gralloc_module_t const *>(module);
-    }
-}
-
-status_t GraphicBufferMapper::registerBuffer(buffer_handle_t handle)
-{
-    ATRACE_CALL();
-    status_t err;
-
-    err = mAllocMod->registerBuffer(mAllocMod, handle);
-
-    ALOGW_IF(err, "registerBuffer(%p) failed %d (%s)",
-            handle, err, strerror(-err));
-    return err;
-}
-
-status_t GraphicBufferMapper::unregisterBuffer(buffer_handle_t handle)
-{
-    ATRACE_CALL();
-    status_t err;
-
-    err = mAllocMod->unregisterBuffer(mAllocMod, handle);
-
-    ALOGW_IF(err, "unregisterBuffer(%p) failed %d (%s)",
-            handle, err, strerror(-err));
-    return err;
-}
-
-status_t GraphicBufferMapper::lock(buffer_handle_t handle,
-        int usage, const Rect& bounds, void** vaddr)
-{
-    ATRACE_CALL();
-    status_t err;
-
-    err = mAllocMod->lock(mAllocMod, handle, static_cast<int>(usage),
-            bounds.left, bounds.top, bounds.width(), bounds.height(),
-            vaddr);
-
-    ALOGW_IF(err, "lock(...) failed %d (%s)", err, strerror(-err));
-    return err;
-}
-
-status_t GraphicBufferMapper::lockYCbCr(buffer_handle_t handle,
-        int usage, const Rect& bounds, android_ycbcr *ycbcr)
-{
-    ATRACE_CALL();
-    status_t err;
-
-    if (mAllocMod->lock_ycbcr == NULL) {
-        return -EINVAL; // do not log failure
-    }
-
-    err = mAllocMod->lock_ycbcr(mAllocMod, handle, static_cast<int>(usage),
-            bounds.left, bounds.top, bounds.width(), bounds.height(),
-            ycbcr);
-
-    ALOGW_IF(err, "lock(...) failed %d (%s)", err, strerror(-err));
-    return err;
-}
-
-status_t GraphicBufferMapper::unlock(buffer_handle_t handle)
-{
-    ATRACE_CALL();
-    status_t err;
-
-    err = mAllocMod->unlock(mAllocMod, handle);
-
-    ALOGW_IF(err, "unlock(...) failed %d (%s)", err, strerror(-err));
-    return err;
-}
 
 // ---------------------------------------------------------------------------
+
+class Rect;
+
+class GraphicBufferMapper : public Singleton<GraphicBufferMapper>
+{
+public:
+    static inline GraphicBufferMapper& get() { return getInstance(); }
+
+    status_t registerBuffer(buffer_handle_t handle);
+
+    status_t unregisterBuffer(buffer_handle_t handle);
+
+    status_t lock(buffer_handle_t handle,
+            int usage, const Rect& bounds, void** vaddr);
+
+    status_t lockYCbCr(buffer_handle_t handle,
+            int usage, const Rect& bounds, android_ycbcr *ycbcr);
+
+    status_t unlock(buffer_handle_t handle);
+
+    // dumps information about the mapping of this handle
+    void dump(buffer_handle_t handle);
+
+private:
+    friend class Singleton<GraphicBufferMapper>;
+    GraphicBufferMapper();
+    gralloc_module_t const *mAllocMod;
+};
+
+// ---------------------------------------------------------------------------
+
 }; // namespace android
+
+#endif // ANDROID_UI_BUFFER_MAPPER_H
+
